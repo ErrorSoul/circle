@@ -8,7 +8,7 @@ gem 'pg'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.2'
-
+gem 'bootstrap-sass', '~> 3.2.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
@@ -24,7 +24,7 @@ gem 'jquery-rails'
 #em "turbolinks"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
-gem 'haml', '~> 4.0.5'
+
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
@@ -35,9 +35,17 @@ end
 group :test do
   gem 'libnotify', '0.8.0'
   gem "capybara", '~> 2.0.3'
+  
+  gem 'selenium-webdriver', '2.35.1'
+  
 end
 
 
+
+group :development do
+  gem 'haml'
+  gem 'haml-rails'
+end
 group :development, :test do
   
   gem 'rspec-rails', '2.13.1'
