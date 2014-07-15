@@ -5,3 +5,41 @@
 
 
 @import "bootstrap";
+@import "bootstrap-sprockets";
+
+/*
+@mixin box_sizing {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+*/
+
+
+@mixin center-block {
+  float: none;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* forms */
+
+.input-group {
+  
+ 
+  margin-bottom: 15px;
+  /*@include box_sizing; */
+}
+
+
+.wrapper-form{
+    border-radius: 50%;
+    border: 20px solid gray;
+    border-top-color: 	#D00000 ;
+    width: 480px;
+    height: 480px;
+    @include center-block;
+ 
+   
+}
+
