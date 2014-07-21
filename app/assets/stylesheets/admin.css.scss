@@ -7,6 +7,8 @@
 @import "bootstrap";
 @import "bootstrap-sprockets";
 
+
+$border-radius-base: 50%;
 /*
 @mixin box_sizing {
   -moz-box-sizing: border-box;
@@ -24,22 +26,32 @@
 }
 /* forms */
 
+
+.input-group-addon{
+    width: 138px;
+}
+
 .input-group {
-  
- 
-  margin-bottom: 15px;
+    
+    margin-bottom: 15px;
   /*@include box_sizing; */
 }
 
 
 .wrapper-form{
+    margin-top: 100px;
+    box-shadow: 0 0 15px #888;
     border-radius: 50%;
-    border: 20px solid gray;
+    border: 35px solid gray;
     border-top-color: 	#D00000 ;
     width: 480px;
     height: 480px;
     @include center-block;
- 
-   
+    
 }
 
+
+.form-input {
+    top: 35%;
+    @include center-block;
+}
