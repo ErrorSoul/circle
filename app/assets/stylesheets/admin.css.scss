@@ -4,19 +4,36 @@
 
 
 
+
+
+
+
+@import "variables"; 
 @import "bootstrap";
 @import "bootstrap-sprockets";
 
-
-$border-radius-base: 50%;
-/*
 @mixin box_sizing {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
-*/
 
+
+button:focus,
+button:active,
+button:hover
+{
+ outline:0px !important;
+    -webkit-appearance:none;
+
+}
+
+.btn:active {
+    background-color: #ffffff;
+border-color: white;
+
+   
+}
 
 @mixin center-block {
   float: none;
@@ -55,3 +72,13 @@ $border-radius-base: 50%;
     top: 35%;
     @include center-block;
 }
+
+
+.login {
+  @include center-block;
+  border-radius: 50%;
+  height: 100px;
+  width: 100px;
+  
+  }
+

@@ -2,7 +2,10 @@
 admin = angular.module( 'admin',['ngRoute'])
  
 admin.controller 'loginCtrl',["$scope",($scope) ->
-        $scope.foo = foo
+        $scope.name = "aaaa"
+        $scope.login = (user) ->
+                $scope.name = user.name
+                $scope.password = user.password
         
   
 ]
