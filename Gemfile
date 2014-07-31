@@ -45,6 +45,10 @@ end
 group :development do
   gem 'haml'
   gem 'haml-rails'
+
+  gem 'spork-rails', '4.0.0'
+  gem 'guard-spork', '1.5.0'
+  gem 'childprocess', '0.3.6'
 end
 group :development, :test do
   

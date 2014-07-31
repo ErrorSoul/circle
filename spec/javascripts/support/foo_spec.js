@@ -9,15 +9,4 @@ describe('Foo', function() {
 
 
 
-describe('templates', function() {
-    beforeEach(function() {
-      browser().navigateTo('/');
-	
-    });
 
-    it('fffff', function(){
-	expect(element('div').html()).toContain('6');
-    });
-
-
-});
