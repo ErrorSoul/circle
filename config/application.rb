@@ -24,6 +24,6 @@ module Circle
     # config.i18n.default_locale = :de
     config.assets.precompile += ['admin.js', 'admin.css']
     #config.assets.paths << Rails.root.join('app', 'assets', 'templates')
-    Rails.application.assets.register_engine '.haml', Tilt::HamlTemplate
+   
   end
 end
