@@ -2,11 +2,15 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.7'
+ruby '2.0.0'
 
 gem 'bcrypt-ruby', '3.1.2'
 
 # Use postgresql as the database for Active Record
 gem 'pg'
+
+gem 'haml'
+gem 'haml-rails'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.2'
@@ -45,8 +49,7 @@ end
 
 
 group :development do
-  gem 'haml'
-  gem 'haml-rails'
+  
 
   gem 'spork-rails', '4.0.0'
   gem 'guard-spork', '1.5.0'
