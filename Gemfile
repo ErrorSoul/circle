@@ -10,7 +10,7 @@ gem 'bcrypt-ruby', '3.1.2'
 gem 'pg'
 
 
-gem 'haml-rails'
+gem 'haml'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.2'
