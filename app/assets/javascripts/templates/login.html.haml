@@ -1,0 +1,22 @@
+
+
+
+
+.row
+  .col-md-12
+
+   
+    .col-md-2.wrapper-form
+      %form.form-input.col-md-12{"ng-submit" => "login(user)", :novalidate => true}
+        .input-group.input-group-lg
+          %span.input-group-addon {{name}}/{{password}}
+          %input.form-control{:type=>"text", :required => true,"ng-model" => "user.name"}
+
+
+        .input-group.input-group-lg
+          %span.input-group-addon PASSWORD
+          %input.form-control{:type=>"password", :required => true, "ng-model"=>"user.password"}
+
+        %button.btn.btn-info.login{:type => "submit"}
+          LOGIN
+
