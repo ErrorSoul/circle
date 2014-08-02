@@ -1,11 +1,35 @@
 
 admin = angular.module( 'admin',['ngRoute'])
+
+admin.config ($httpProvider) ->
+  authToken = $("meta[name=\"csrf-token\"]").attr("content")
+  $httpProvider.defaults.headers.common["X-CSRF-TOKEN"] = authToken
+
+
+
+admin.factory 'sessionStorage', ["$http",($http) ->
+        login = (newUser)->
+                console.log("ffff", newUser)
+                $http.post('/sessions', user: newUser).success((result) ->
+                        console.log(result)
+                        result.authorized)
+                        .error((error) -> console.log(error))
+
+
  
-admin.controller 'loginCtrl',["$scope",($scope) ->
-        $scope.name = "NAME"
+        ]
+
+ 
+admin.controller 'loginCtrl',["$scope", "sessionStorage", ($scope, sessionStorage) ->
+        $scope.email = "EMAIL"
         $scope.login = (user) ->
-                $scope.name = user.name
-                $scope.password = user.password
+                console.log("user", user)
+                console.log('ffff', sessionStorage)
+                #a = $scope.email
+                #console.log(a,'a')
+                $scope.email = sessionStorage(user)
+                #t = $scope.email
+                #console.log(t, "F")
         
   
 ]

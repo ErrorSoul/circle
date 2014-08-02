@@ -11,7 +11,8 @@ css_dir: "app/assets/stylesheets"
 # list of file expressions to include as source files
 # relative path from src_dir
 src_files:
- - "application.{js.coffee,js,coffee}"
+ - "admin.{js.coffee,js,coffee}"
+ - "spec/javascripts/support/angular-mocks.js"
 
 # list of file expressions to include as css files
 # relative path from css_dir

@@ -124,4 +124,13 @@ describe User do
       expect(@user.reload.email).to eq mixed_case_email.downcase
     end
   end
+
+
+  describe "test factory girl" do
+    let(:user) { FactoryGirl.create(:user)}
+    subject {user}
+    it { should be_valid}
+  end
+
+ 
 end

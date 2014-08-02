@@ -43,6 +43,7 @@ group :test do
   gem "capybara", '~> 2.0.3'
   
   gem 'selenium-webdriver', '2.35.1'
+  gem 'factory_girl_rails'
   
 end
 
