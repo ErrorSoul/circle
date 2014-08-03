@@ -20,8 +20,14 @@ admin.factory 'sessionStorage', ["$http",($http) ->
  
 admin.controller 'loginCtrl',["$scope", "sessionStorage", ($scope, sessionStorage) ->
         $scope.email = "EMAIL"
+        $scope.user = {}
+        $scope.user.email = "oleg@mail.ru"
+        $scope.user.password = "leelovaya"
+        
         $scope.login = (user) ->
+          $scope.email = user.email
           sessionStorage.login(user, (data) ->
+            console.log(data, "AAAAAAAAA")
             $scope.email = data.user.name)
 
 
