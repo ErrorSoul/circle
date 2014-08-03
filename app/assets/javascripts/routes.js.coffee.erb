@@ -8,28 +8,27 @@ admin.config ($httpProvider) ->
 
 
 admin.factory 'sessionStorage', ["$http",($http) ->
-        login = (newUser)->
+        login = (newUser, callback)->
                 console.log("ffff", newUser)
-                $http.post('/sessions', user: newUser).success((result) ->
-                        console.log(result.user, "result")
-                        result.authorized)
+                $http.post('/sessions', user: newUser).success(callback)
                         .error((error) -> console.log(error))
-
+        { login: login }
 
  
         ]
 
  
 admin.controller 'loginCtrl',["$scope", "sessionStorage", ($scope, sessionStorage) ->
-        #$scope.email = "EMAIL"
+        $scope.email = "EMAIL"
         $scope.login = (user) ->
-                console.log("user", user)
-                console.log('ffff', sessionStorage)
-                a = $scope.email
-                console.log(a,'a')
-                $scope.email = sessionStorage(user)
-                t = $scope.email
-                console.log(t, "F")
+          sessionStorage.login(user, (data) ->
+            $scope.email = data.user.name)
+
+
+
+
+
+
         
   
 ]
