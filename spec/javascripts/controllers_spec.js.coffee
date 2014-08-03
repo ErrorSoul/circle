@@ -8,4 +8,5 @@ describe "Restauranteur controllers", ->
         $scope: scope
       )
       expect(scope.email.length).toBe 5
+      expect(scope.email).toBeDefined()
     )
