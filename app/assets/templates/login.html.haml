@@ -9,7 +9,7 @@
     .col-md-2.wrapper-form
       %form.form-input.col-md-12{"ng-submit" => "login(user)", :novalidate => true}
         .input-group.input-group-lg
-          %span.input-group-addon {{user.email}}/{{password}}
+          %span.input-group-addon {{email}}/{{password}}
           %input.form-control{:type=>"text", :required => true,"ng-model" => "user.email"}
 
 
