@@ -16,52 +16,112 @@ describe "sessionStorage test", ->
           
             remember_token: "thomas"
 
+    @set_user =
+               id: @user.id
+               name: @user.name
+    @bad_user = {}
+
+
+  afterEach ->
+    @service = undefined
+    @httpB.verifyNoOutstandingExpectation()
+    @httpB.verifyNoOutstandingRequest()
+
+
+
+
 
   it "check inject", ->
     console.log("SERVICE", @service)
     expect(@service).toBeDefined()
-    
 
-  describe "SessionStorage getter/setter ", ->
+  it "check authorized", ->
+    expect(@service.authorized()).toBe(false)
+
+  describe "sessionStorage login method", ->
+    beforeEach ->
+
+      u = @service.updateUser
+      @callback = (data) ->
+        console.log(data)
+        u(data.user, data.authorized)
+
+    it "login and authentication", ->
+      @httpB.expectPOST("/sessions", user: @user).respond(
+        200,
+        user: @user,
+        authorized: "true")
+      @service.login(@user, @callback)
+      @httpB.flush()
+      expect(@service.authorized()).toBe(true)
+      expect(@service.getUser()).toEqual(@set_user)
+  
+    it "login and bad authentication", ->
+      @httpB.expectPOST("/sessions", user: @bad_user).respond(
+        200,
+        authorized: "false")
+      @service.login(@bad_user, @callback)
+      @httpB.flush()
+      expect(@service.authorized()).toBe(false)
+      expect(@service.getUser()).toEqual(@bad_user)
+      
+      
+
+  describe "sessionStorage updateUser", ->
+    it "authorized", ->
+      @service.updateUser(@user, "true")
+      expect(@service.getUser()).toEqual(@set_user)
+      expect(@service.authorized()).toBe(true)
+
+    it "no authorized", ->
+      @service.updateUser(@user, "false")
+      expect(@service.getUser()).toEqual({})
+      expect(@service.authorized()).toBe(false)
+
+  describe "sessionStorage getter/setter ", ->
     describe "getUser", ->
       it "no user", ->
+        console.log(@service, "SSSSSS")
+      
         null_user = @service.getUser()
-        expect(null_user).toBeNull()
+        console.log(null_user, "NULL_USER")
+        expect(null_user).toEqual({})
 
       describe "have user", ->
         beforeEach ->
           
           @service._user = @user
           @current_user = @service.getUser()
-          console.log(@service._user,"USER_BEFORE")
+          
 
         afterEach ->
-          @service._user = null
-          console.log(@service._user, "USER_AFTER")
+          @service._user = {}
+          
 
       
       
         it "user is equal", ->
-          
           expect(@current_user).toBe(@user)
+
     describe "setUser", ->
       beforeEach ->
-        @service._user = null
+        @service._user = {}
         @service.setUser(@user)
+        
 
 
       it "pass user ", ->
-          expect(@service.getUser()).toBe(@user)
+          expect(@service.getUser()).toEqual(@set_user)
 
       it "second set user", ->
-          @service.setUser(null)
-          expect(@service.getUser()).toBeNull()
+          @service.setUser({})
+          expect(@service.getUser()).toEqual({})
 
        
       describe "user attributes", ->
-        it "user.id", ->
-            user = @service.getUser()
-            expect(user.id).toBeDefined()
-            expect(user.id).toBe(10)
+        it "user set correct", ->
+          u = @service.getUser()
+          expect(u).toEqual(@set_user)
+      
 
     

@@ -30,36 +30,53 @@ admin.service("Mockach", [class X
 ###
 admin.service 'sessionStorage', ["$http", class Sessions
 
-  constructor: ($http) ->
-    @_user = null
-    @t = 45
+  constructor: (@$http) ->
+    @_user = {}
+    @_authorized = false
+
+  authorized: ->
+    @_authorized is "true"
+
+  setAuth: (status) ->
+    @_authorized = status
+    
 
   getUser:  ->
     @_user
 
   setUser: (user) ->
-    @_user = user
+    @_user.id = user.id 
+    @_user.name = user.name 
 
   login: (newUser, callback)->
-    console.log("ffff", newUser)
-    $http.post('/sessions', user: newUser).success(callback)
+    @$http.post('/sessions', user: newUser).success(callback)
           .error((error) -> console.log(error))
+
+  updateUser: (newUser, status) =>
+    if status is "true"
+      @setUser(newUser)
+      @setAuth(status)
 
 
  ]
 
  
-admin.controller 'loginCtrl',["$scope", "sessionStorage", ($scope, sessionStorage) ->
+admin.controller 'loginCtrl',["$scope", "$location","sessionStorage", ($scope, $location, sessionStorage) ->
+        #debug --------------------
         $scope.email = "EMAIL"
         $scope.user = {}
         $scope.user.email = "oleg@mail.ru"
         $scope.user.password = "leelovaya"
+        # ------------------------
         
         $scope.login = (user) ->
+          #$location.path('/fff')
           $scope.email = user.email
           sessionStorage.login(user, (data) ->
             console.log(data, "AAAAAAAAA")
-            $scope.email = data.user.name)
+            sessionStorage.updateUser(data.user, data.authorized)
+            console.log(sessionStorage.getUser(), sessionStorage.authorized(), "TYTYTY")
+            $scope.email = "CHANGE ME")
 
 
 
