@@ -39,11 +39,32 @@ button:hover
 
 .btn:active {
     background-color: #ffffff;
-border-color: white;
+    border-color: white;
+    color: $btn-info-bg;
 
    
 }
 
+.btn {
+  box-shadow: 0 0 15px #888;
+  }
+.btn:disabled {
+  color: $btn-info-bg;
+  box-shadow: 0 0 15px #ffffff;
+  }
+
+
+
+
+input.ng-dirty.ng-invalid {
+   //background-color: red;
+  }
+
+
+
+input.ng-valid.ng-dirty {
+    background-color: #66afe9 ;
+  }
 @mixin center-block {
   float: none;
   display: block;

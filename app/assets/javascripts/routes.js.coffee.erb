@@ -3,7 +3,7 @@ admin = angular.module( 'admin',['ngRoute'])
 
 admin.config ($httpProvider) ->
   
-  authToken = $("meta[name=\"csrf-token\"]").attr("content")
+  authToken = $("meta[name=csrf-token]").attr("content")
   $httpProvider.defaults.headers.common["X-CSRF-TOKEN"] = authToken
 
 ## mock class for test
@@ -48,7 +48,7 @@ admin.service 'sessionStorage', ["$http", class Sessions
     @_user.id = user.id 
     @_user.name = user.name 
 
-  login: (newUser, callback)->
+  login: (newUser,callback)->
     @$http.post('/sessions', user: newUser).success(callback)
           .error((error) -> console.log(error))
 
@@ -83,7 +83,9 @@ admin.controller 'loginCtrl',["$scope", "$location","sessionStorage", ($scope, $
             console.log(data, "AAAAAAAAA")
             sessionStorage.updateUser(data.user, data.authorized)
             console.log(sessionStorage.getUser(), sessionStorage.authorized(), "TYTYTY")
-            $scope.email = "CHANGE ME")
+            $scope.email = "CHANGE ME").then(->($scope.email = "FFFF"))
+    
+          
 
 
 

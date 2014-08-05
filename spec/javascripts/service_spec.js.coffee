@@ -79,6 +79,7 @@ describe "sessionStorage test", ->
         @service.updateUser(@user, "true")
         @service.logout(@callback)
         @httpB.flush()
+        console.log(@service.getUser(), "USERRRR")
         expect(@service.authorized()).toBe(false)
         expect(@service.getUser()).toEqual(@bad_user)
 
@@ -102,6 +103,11 @@ describe "sessionStorage test", ->
 
     it "no authorized", ->
       @service.updateUser(@user, "false")
+      expect(@service.getUser()).toEqual({})
+      expect(@service.authorized()).toBe(false)
+
+    it "authorized with null user", ->
+      @service.updateUser(null, "false")
       expect(@service.getUser()).toEqual({})
       expect(@service.authorized()).toBe(false)
 
