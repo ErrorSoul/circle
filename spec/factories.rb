@@ -5,6 +5,14 @@ FactoryGirl.define do
     password "foobar"
     password_confirmation "foobar"
   end
+
+
+   factory :ataman, parent: :user  do |f|
+    f.name     "Nusha"
+    f.email    "nusha@example.com"
+    f.password "foobar"
+    f.password_confirmation "foobar"
+  end
   factory :invalid_user_password, parent: :user do |f|
     f.password " "
     f.password_confirmation " "

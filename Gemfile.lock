@@ -239,6 +239,7 @@ DEPENDENCIES
   jquery-rails
   libnotify (= 0.8.0)
   pg
+  pry
   rails (= 4.0.2)
   rails_12factor
   rb-fchange (>= 0.0.6)

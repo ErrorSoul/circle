@@ -7,11 +7,13 @@ class SessionsController < ApplicationController
       sign_in user
       render json: {  user: user, authorized: 'true' }
     else
-      #raise StandardError
       render json: { authorized: 'false' }
     end
   end
 
 
-
+  def destroy
+    sign_out 
+    render json: { authorized: "false" }
+  end
 end

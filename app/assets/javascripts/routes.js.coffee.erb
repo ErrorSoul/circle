@@ -52,10 +52,17 @@ admin.service 'sessionStorage', ["$http", class Sessions
     @$http.post('/sessions', user: newUser).success(callback)
           .error((error) -> console.log(error))
 
+  logout: (callback) ->
+    @$http.delete('/sessions', id: 1).success(callback)
+          .error((error) -> console.log(error))
+
   updateUser: (newUser, status) =>
     if status is "true"
-      @setUser(newUser)
-      @setAuth(status)
+      user = newUser
+    else
+      user = {}
+    @setUser(user)
+    @setAuth(status)
 
 
  ]

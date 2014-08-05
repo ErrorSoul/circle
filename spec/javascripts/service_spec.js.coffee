@@ -38,12 +38,12 @@ describe "sessionStorage test", ->
   it "check authorized", ->
     expect(@service.authorized()).toBe(false)
 
-  describe "sessionStorage login method", ->
+  describe "sessionStorage LOGIN|LOGOUT methods", ->
     beforeEach ->
 
       u = @service.updateUser
       @callback = (data) ->
-        console.log(data)
+        console.log(data, "DDDDDDDDDDDDAAAAAAAAT")
         u(data.user, data.authorized)
 
     it "login and authentication", ->
@@ -58,12 +58,39 @@ describe "sessionStorage test", ->
   
     it "login and bad authentication", ->
       @httpB.expectPOST("/sessions", user: @bad_user).respond(
-        200,
+        
         authorized: "false")
       @service.login(@bad_user, @callback)
       @httpB.flush()
       expect(@service.authorized()).toBe(false)
       expect(@service.getUser()).toEqual(@bad_user)
+
+
+    describe "logout", ->
+      beforeEach ->
+        @httpB.expectDELETE("/sessions").respond(
+
+        
+          authorized: "false")
+    
+        
+      it "after login", ->
+    
+        @service.updateUser(@user, "true")
+        @service.logout(@callback)
+        @httpB.flush()
+        expect(@service.authorized()).toBe(false)
+        expect(@service.getUser()).toEqual(@bad_user)
+
+      it "without login", ->
+        
+        @service.logout(@callback)
+        @httpB.flush()
+        expect(@service.authorized()).toBe(false)
+        expect(@service.getUser()).toEqual(@bad_user)
+
+      
+    
       
       
 
