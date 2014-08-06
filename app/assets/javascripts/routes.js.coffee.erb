@@ -48,7 +48,7 @@ admin.service 'sessionStorage', ["$http", class Sessions
     @_user.id = user.id 
     @_user.name = user.name 
 
-  login: (newUser,callback)->
+  login: (newUser, callback)->
     @$http.post('/sessions', user: newUser).success(callback)
           .error((error) -> console.log(error))
 
@@ -70,21 +70,34 @@ admin.service 'sessionStorage', ["$http", class Sessions
  
 admin.controller 'loginCtrl',["$scope", "$location","sessionStorage", ($scope, $location, sessionStorage) ->
         #debug --------------------
-        $scope.email = "EMAIL"
+        #$scope.email = "EMAIL"
         $scope.user = {}
         $scope.user.email = "oleg@mail.ru"
         $scope.user.password = "leelovaya"
         # ------------------------
         
         $scope.login = (user) ->
-          #$location.path('/fff')
-          $scope.email = user.email
+          #$scope.email = user.email
+          #$scope.password = user.password
           sessionStorage.login(user, (data) ->
-            console.log(data, "AAAAAAAAA")
-            sessionStorage.updateUser(data.user, data.authorized)
-            console.log(sessionStorage.getUser(), sessionStorage.authorized(), "TYTYTY")
-            $scope.email = "CHANGE ME").then(->($scope.email = "FFFF"))
+            sessionStorage.updateUser(data.user, data.authorized))
+              .then(loginRequestHandler, loginErrorHandler)
+            
+            
+            
     
+        loginRequestHandler = (result) ->
+          if sessionStorage.authorized()
+            $location.path('/dashboard')
+          else
+            $scope.message = "Invalid login or password"
+
+        loginErrorHandler = (error) ->
+          $scope.message = "Error #{error}"
+
+       
+        $scope.showMessage = ->
+          $scope.message isnt undefined and $scope.message.length > 0
           
 
 

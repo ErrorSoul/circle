@@ -8,8 +8,9 @@
    
     .col-md-2.wrapper-form
       %form.form-input.col-md-12{"ng-submit" => "form.$valid && login(user)", :novalidate => true, :name => "form"}
+        %p.error-message{"ng-cloak" => true, "ng-show" => "showMessage()"} {{message}}
         .input-group.input-group-lg
-          %span.input-group-addon {{email}}/{{password}}
+          %span.input-group-addon EMAIL
           %input.form-control{:type=>"text", :required => true,"ng-model" => "user.email"}
 
 
