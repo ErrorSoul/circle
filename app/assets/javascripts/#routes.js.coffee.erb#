@@ -1,0 +1,128 @@
+
+admin = angular.module( 'admin',['ngRoute'])
+
+admin.config ($httpProvider) ->
+  
+  authToken = $("meta[name=csrf-token]").attr("content")
+  $httpProvider.defaults.headers.common["X-CSRF-TOKEN"] = authToken
+
+## mock class for test
+admin.service("Mockach", [class X
+
+    t: () -> return 3
+    b: () -> return 4
+  ]) 
+###
+first method to pass service in coffeescript
+myClass = () ->
+
+myClass.prototype.t = -> return 3
+
+
+admin.service("Mockach", myClass)
+
+#second method -------------------------
+admin.service("Mockach", [class X
+
+    t: () -> return 3
+    b: () -> return 4
+  ]) 
+###
+admin.service 'sessionStorage', ["$http", class Sessions
+
+  constructor: (@$http) ->
+    @_user = {}
+    @_authorized = false
+
+  authorized: ->
+    @_authorized is "true"
+
+  setAuth: (status) ->
+    @_authorized = status
+    
+
+  getUser:  ->
+    @_user
+
+  setUser: (user) ->
+    @_user.id = user.id 
+    @_user.name = user.name 
+
+  login: (newUser, callback)->
+    @$http.post('/sessions', user: newUser).success(callback)
+          .error((error) -> console.log(error))
+
+  logout: (callback) ->
+    @$http.delete('/sessions', id: 1).success(callback)
+          .error((error) -> console.log(error))
+
+  updateUser: (newUser, status) =>
+    if status is "true"
+      user = newUser
+    else
+      user = {}
+    @setUser(user)
+    @setAuth(status)
+
+
+ ]
+
+ 
+admin.controller 'loginCtrl',["$scope", "$location","sessionStorage", ($scope, $location, sessionStorage) ->
+        #debug --------------------
+        #$scope.email = "EMAIL"
+        $scope.user = {}
+        $scope.user.email = "oleg@mail.ru"
+        $scope.user.password = "leelovaya"
+        # ------------------------
+        
+        $scope.login = (user) ->
+          #$scope.email = user.email
+          #$scope.password = user.password
+          sessionStorage.login(user, (data) ->
+            sessionStorage.updateUser(data.user, data.authorized))
+              .then(loginRequestHandler, loginErrorHandler)
+            
+            
+            
+    
+        loginRequestHandler = (result) ->
+          if sessionStorage.authorized()
+            $location.path('/dashboard')
+          else
+            $scope.message = "Invalid login or password"
+
+        loginErrorHandler = (error) ->
+          $scope.message = "Error #{error}"
+
+       
+        $scope.showMessage = ->
+          $scope.message isnt undefined and $scope.message.length >0
+          
+
+
+
+
+
+
+        
+  
+]
+
+
+admin.config [
+  '$routeProvider'
+  '$locationProvider'
+  
+  ($routeProvider, $locationProvider) ->
+    # enabling html5Mode
+    $locationProvider.html5Mode true
+    
+    $routeProvider
+    .when '/'    ,
+      templateUrl: "<%= asset_path('login.html') %>"
+      controller: 'loginCtrl'
+  
+
+
+]
