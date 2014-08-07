@@ -26,4 +26,11 @@ describe Post do
     it { should_not be_valid }
 
   end
+
+  describe "when title is not uniq" do
+    before { @wrong_post = Post.new(title: "Example Post", text: "Night. Sun.")
+     @wrong_post.save}
+   
+    it { should_not be_valid }
+  end
 end

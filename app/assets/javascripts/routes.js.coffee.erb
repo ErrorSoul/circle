@@ -5,17 +5,32 @@ admin.config [
   '$httpProvider'
   '$routeProvider'
   '$locationProvider'
-  ($httpProvider, $routeProvider, $locationProvider) ->
+  '$provide'
+  ($httpProvider, $routeProvider, $locationProvider, $provide) ->
   
     authToken = $("meta[name=csrf-token]").attr("content")
     $httpProvider.defaults.headers.common["X-CSRF-TOKEN"] = authToken
     # enabling html5Mode
-    $locationProvider.html5Mode true
+    #$locationProvider.html5Mode true
+    #$locationProvider.hashPrefix('!')
+    
+   
+  
+  
+  
+    
+    #correct /admin/login html5 !
+    # get "/"  
+    
     
     $routeProvider
-      .when '/'    ,
+      .when '/login',
         templateUrl: "<%= asset_path('login.html') %>"
         controller: 'loginCtrl'
+
+      .when '/dashboard',
+        templateUrl: "<%= asset_path('dashboard.html') %>"
+        controller: 'DashboardCtrl'
 ]
 
 
@@ -116,14 +131,18 @@ admin.controller 'loginCtrl',["$scope", "$location","sessionStorage", ($scope, $
           $scope.message isnt undefined and $scope.message.length >0
           
 
+  
+]
 
-
+admin.controller "DashboardCtrl", ["$scope", "sessionStorage",($scope, sessionStorage) ->
+  $scope.user = sessionStorage.getUser()
+  
+  
+  ]
 
 
 
         
-  
-]
 
 
 

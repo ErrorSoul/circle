@@ -21,6 +21,12 @@ FactoryGirl.define do
   factory :invalid_user_email, parent: :user do |z|
     z.email  nil 
   end
+  
+
+  factory :post do
+    title "The Victory"
+    text  "Lorem inpusm fuck TV"
+    end
 end
 
 

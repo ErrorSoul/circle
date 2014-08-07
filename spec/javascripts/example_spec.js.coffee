@@ -41,7 +41,7 @@ describe "Login Controller", ->
         @$httpBackend.flush()
         expect(@service.authorized()).toBe(false)
         expect(@service.getUser()).toEqual({})
-        expect(@location.path()).toEqual('/')
+        expect(@location.path()).toEqual('/login')
         expect(@scope.message).toEqual("Invalid login or password")
 
       it "with correct user", ->

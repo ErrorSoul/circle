@@ -2,7 +2,8 @@ Circle::Application.routes.draw do
   mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
 
 
-  root 'admins#index'
+  get '/admin' => 'admins#index'
+  #get '/admin/login' => 'admins#index'
   resources :sessions, only: [:create, :destroy]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
