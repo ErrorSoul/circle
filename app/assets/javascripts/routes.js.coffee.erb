@@ -105,6 +105,9 @@ admin.factory 'Post', ['$resource', ($resource) ->
     'query':
       method: 'GET'
       #isArray: true
+      params: {}
+    
+    
 
 
 
@@ -156,14 +159,23 @@ admin.controller 'loginCtrl',["$scope", "$location","sessionStorage", ($scope, $
 ]
 
 admin.controller "DashboardCtrl", ["$scope", "sessionStorage", "Post", ($scope, sessionStorage, Post) ->
-  console.log(Post.query(), "POST")
-  console.log(Post.query().posts, "POSTee")
-  $scope.posts = Post.query()
-  $scope.us = Post.query().$promise.then((data)->
-    console.log(data,"DAAATA")
-    console.log(data.posts,"FFFFAATA")
-    console.log(data.posts[0].title,"DAAATA")
-    $scope.posts = data.posts)
+  
+  Post.query().$promise.then((data)->
+    console.log("DATA !", data)
+    $scope.posts = data.posts
+    ).then((data) ->
+      console.log(data)
+      
+      
+      )
+  $scope.f = (num) ->
+    posts = $scope.posts
+    for post in posts
+        if post.id != num
+          post.hideValue = true
+
+  
+  
   
   
   ]
