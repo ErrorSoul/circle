@@ -1,5 +1,5 @@
 
-admin = angular.module( 'admin',['ngRoute'])
+admin = angular.module( 'admin',['ngRoute', 'ngResource'])
 
 admin.config [
   '$httpProvider'
@@ -22,13 +22,15 @@ admin.config [
     #correct /admin/login html5 !
     # get "/"  
     
-    
+     
     $routeProvider
       .when '/login',
         templateUrl: "<%= asset_path('login.html') %>"
         controller: 'loginCtrl'
 
       .when '/dashboard',
+        #templateUrl: '/assets/dash.html'
+        #controller : "LocationController"
         templateUrl: "<%= asset_path('dashboard.html') %>"
         controller: 'DashboardCtrl'
 ]
@@ -98,7 +100,23 @@ admin.service 'sessionStorage', ["$http", class Sessions
 
  ]
 
- 
+admin.factory 'Post', ['$resource', ($resource) ->
+  $resource('/posts/:id', {id: '@id'},
+    'query':
+      method: 'GET'
+      #isArray: true
+
+
+
+
+      )
+
+
+  ]
+
+#########################################
+# controllers
+######################################### 
 admin.controller 'loginCtrl',["$scope", "$location","sessionStorage", ($scope, $location, sessionStorage) ->
         #debug --------------------
         #$scope.email = "EMAIL"
@@ -107,9 +125,11 @@ admin.controller 'loginCtrl',["$scope", "$location","sessionStorage", ($scope, $
         $scope.user.password = "leelovaya"
         # ------------------------
         
+        
         $scope.login = (user) ->
           #$scope.email = user.email
           #$scope.password = user.password
+          $scope.user = {}
           sessionStorage.login(user, (data) ->
             sessionStorage.updateUser(data.user, data.authorized))
               .then(loginRequestHandler, loginErrorHandler)
@@ -118,6 +138,7 @@ admin.controller 'loginCtrl',["$scope", "$location","sessionStorage", ($scope, $
             
     
         loginRequestHandler = (result) ->
+          console.log($location.path(), "FFFFE")
           if sessionStorage.authorized()
             $location.path('/dashboard')
           else
@@ -134,8 +155,15 @@ admin.controller 'loginCtrl',["$scope", "$location","sessionStorage", ($scope, $
   
 ]
 
-admin.controller "DashboardCtrl", ["$scope", "sessionStorage",($scope, sessionStorage) ->
-  $scope.user = sessionStorage.getUser()
+admin.controller "DashboardCtrl", ["$scope", "sessionStorage", "Post", ($scope, sessionStorage, Post) ->
+  console.log(Post.query(), "POST")
+  console.log(Post.query().posts, "POSTee")
+  $scope.posts = Post.query()
+  $scope.us = Post.query().$promise.then((data)->
+    console.log(data,"DAAATA")
+    console.log(data.posts,"FFFFAATA")
+    console.log(data.posts[0].title,"DAAATA")
+    $scope.posts = data.posts)
   
   
   ]

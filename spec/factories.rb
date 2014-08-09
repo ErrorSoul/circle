@@ -1,4 +1,7 @@
 FactoryGirl.define do
+
+  sequence(:title) { |n| "Example title #{n}" }
+  sequence(:text)  { |n| Faker::Lorem.sentence(4, false, 2)}
   factory :user do
     name     "Michael"
     email    "michael@example.com"
@@ -24,9 +27,9 @@ FactoryGirl.define do
   
 
   factory :post do
-    title "The Victory"
-    text  "Lorem inpusm fuck TV"
-    end
+    title 
+    text
+  end
 end
 
 

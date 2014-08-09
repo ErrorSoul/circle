@@ -9,10 +9,9 @@ describe "Login Controller", ->
     beforeEach(inject(($injector, _$httpBackend_, _$location_, $rootScope, $controller) ->
       @$httpBackend = _$httpBackend_
       @location = _$location_
+      @r = $rootScope
       @scope = $rootScope.$new()
       @service = $injector.get("sessionStorage")
-      console.log(@service, "SERVICE")
-      console.log(@service.authorized(), "AUTHSERVICE")
       @ctrl = $controller('loginCtrl', $scope: @scope)
       @user =
                email: "bruce2000@mail.ru"
@@ -34,24 +33,36 @@ describe "Login Controller", ->
       @$httpBackend.verifyNoOutstandingRequest()
 
     describe "login method", ->
+    
+    
       it "with bad user ", ->
         
+        #spyOn(@location, "path").andReturn("/login")
+          
+        
         @$httpBackend.expectPOST('/sessions', user: @bad_email).respond({authorized: 'false'})
+        #because mock location can't read path properly
+        # location.path equal '' ;('/' in html5mode)
+        @location.path('/login')
+        
         @scope.login(@bad_email)
         @$httpBackend.flush()
         expect(@service.authorized()).toBe(false)
         expect(@service.getUser()).toEqual({})
+        #expect(@location.path).toHaveBeenCalled()
         expect(@location.path()).toEqual('/login')
         expect(@scope.message).toEqual("Invalid login or password")
 
       it "with correct user", ->
+        spyOn(@location, "path")
         
         @$httpBackend.expectPOST('/sessions', user: @user).respond({user: @user, authorized: 'true'})
         @scope.login(@user)
         @$httpBackend.flush()
         expect(@service.authorized()).toBe(true)
         expect(@service.getUser()).toEqual(@set_user)
-        expect(@location.path()).toEqual('/dashboard') 
+        expect(@location.path).toHaveBeenCalledWith("/dashboard")
+        
       
     ###
 

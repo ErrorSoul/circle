@@ -1,2 +1,11 @@
-%p 
-  Hello, {{user.name}}
+
+
+.row
+  .col-md-12
+    %ul.posts
+      %li.thumbnail{"ng-repeat" => "post in posts" }
+        %a.thumb{:href => '#/posts/{{post.id}}'} 
+          {{post.title}}
+
+
+        %p {{post.text}} 
