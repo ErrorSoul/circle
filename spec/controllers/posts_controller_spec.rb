@@ -19,4 +19,16 @@ describe PostsController do
     end
   end
 
+  
+  describe "edit method" do
+    it "should return post 1 " do
+      get :edit, id: post_id_1.id
+      expected_json = {post: post_id_1 }.to_json
+      expect(response.body).to eq expected_json
+    end
+  end
+
+
 end
+
+

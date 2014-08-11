@@ -6,4 +6,10 @@ class PostsController < ApplicationController
     render json: { posts: @posts }
     
   end
+  
+
+  def edit 
+    @post = Post.find(params[:id])
+    render json: { post: @post }
+  end
 end

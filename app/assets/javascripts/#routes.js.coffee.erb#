@@ -186,10 +186,7 @@ admin.controller "DashboardCtrl", ["$scope", "sessionStorage", "Post", ($scope, 
 
 
 admin.controller "PostDetailCtrl", ["$scope", "sessionStorage",'$routeParams', "Post", ($scope, sessionStorage, $routeParams, Post) ->
-  console.log($routeParams.id, "ID")
-  $scope.x = 5
-  $scope.post = Post.get({id: $routeParams.id, action: "edit" }, (data) ->
-    console.log(data, "D")
+  Post.get({id: $routeParams.id, action: "edit" }, (data) ->
     $scope.post = data.post )
 
   ]
