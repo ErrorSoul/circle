@@ -3,10 +3,21 @@
 
 .row
   .col-md-12
-    %form.form-input.col-md-12{"ng-submit" => "form.$valid && login(user)", :novalidate => true, :name => "form"}
+    %form.form-input.col-md-10{"ng-submit" => "form.$valid && x()", :novalidate => true, :name => "form"}
       %p.error-message{"ng-cloak" => true, "ng-show" => "showMessage()"} {{message}}
-      %div{{"ng-model"=> "post.x"}} 
-        {{post.title }}
-      %h2 
-        {{post.x}}
-      %p {{post.text}}
+      %div
+        {{x}}
+        
+      %h2#title.editable{ "ng-bind-html"=>"post.title" }
+        {{post.title}}
+       
+      %hr
+       
+      %p#text.editable{ "ng-bind-html"=>"post.text"} 
+        {{post.text}}
+      
+
+      %button.btn.btn-info{:type => "submit", "ng-disabled"=>"t(post.title)" }
+        Save Text
+%script
+  var editor = new MediumEditor('.editable');

@@ -1,5 +1,6 @@
 class PostsController < ApplicationController
   respond_to :json
+  before_action :set_post, only: [:edit, :update]
 
   def index
     @posts = Post.all
@@ -12,4 +13,24 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
     render json: { post: @post }
   end
+
+  def update
+    if @post.update_attributes(post_params)
+      render json: { message: "Your text saved" }
+    else
+      render json: {errors: @post.errors.full_messages}
+    end
+  end
+
+  private
+   
+    def set_post
+      @post = Post.find(params[:id])
+    end
+
+    
+    def post_params
+     
+      params.require(:post).permit(:title, :text)
+    end
 end

@@ -3,11 +3,15 @@
 .row
   .col-md-12
     /*%p {{posts}}*/
+    %h1.center-block
+      All Posts
+    %hr
     %ul.posts
       %li.thumbnail{"ng-repeat" => "post in posts", 'ng-hide'=> 'post.hideValue', "ng-click" => "f(post.id)"} 
         {{post.id}}
-        %a.thumb{:href => '#/posts/{{post.id}}'} 
+        %a.thumb{:href => '#/posts/{{post.id}}', "ng-bind-html"=> 'post.title'} 
           {{post.title}}
 
 
-        %p {{post.text}} 
+        %p{"ng-bind-html"=> 'post.text'} 
+          {{post.text}} 
