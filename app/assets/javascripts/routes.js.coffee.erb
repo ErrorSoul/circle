@@ -192,27 +192,37 @@ admin.controller "DashboardCtrl", ["$scope", "sessionStorage", "Post", ($scope, 
 admin.controller "PostDetailCtrl", ["$scope", "sessionStorage",'$routeParams', "Post", ($scope, sessionStorage, $routeParams, Post) ->
   Post.get({id: $routeParams.id, action: "edit" }, (data) ->
     $scope.post = data.post
-    console.log($scope.post, "P") )
-  console.log($scope.post, "#") 
-  $scope.t = (title) ->
-    title is document.getElementById('title').innerHTML
+    console.log($scope.post, "P"))
+    
+  
+  $scope.input_check = true
+  angular.element('#title, #text').bind('input', ()->
+    $scope.input_check = false
+    $scope.$apply())
+
+
+
+  #$scope.t = (title) ->
+    
+      #title is document.getElementById('title').innerHTML
   $scope.x=() ->
     $scope.post.title = document.getElementById('title').innerHTML
     $scope.post.text = document.getElementById('text').innerHTML
     Post.update({id: $routeParams.id}, $scope.post, (data) ->
       console.log(data, "D")
       $scope.message = data.message or data.errors
-      
-      
+      $scope.input_check = true
       )
    
-    console.log($scope.post.title)
-    console.log($scope.post.text)
+  
+  
   $scope.showMessage = ->
           $scope.message isnt undefined and $scope.message.length >0
 
   ]
        
+
+
 
 
 

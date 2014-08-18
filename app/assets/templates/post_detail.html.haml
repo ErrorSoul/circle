@@ -8,16 +8,17 @@
       %div
         {{x}}
         
-      %h2#title.editable{ "ng-bind-html"=>"post.title" }
+      %h#title.editable{ 'ng-model'=>'post.title',"ng-bind-html"=>"post.title" }
         {{post.title}}
        
       %hr
        
-      %p#text.editable{ "ng-bind-html"=>"post.text"} 
+      %p#text.editable{ "ng-bind-html"=>"post.text"}
         {{post.text}}
+        
       
 
-      %button.btn.btn-info{:type => "submit", "ng-disabled"=>"t(post.title)" }
+      %button.btn.btn-info{:type => "submit", "ng-disabled"=>"input_check" }
         Save Text
 %script
   var editor = new MediumEditor('.editable');
