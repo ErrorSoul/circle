@@ -20,7 +20,17 @@
   box-sizing: border-box;
 }
 
+
+@mixin border-color-top($radius) {
+  border-top: $radius solid red;
+  border-left: $radius solid red;
+  }
 /* miscellaneous */
+
+.form-control {
+  border: 0px solid;
+  @include border-color-top(5px);
+  }
 
 .debug_dump {
   clear: both;
@@ -86,12 +96,14 @@ input.ng-valid.ng-dirty {
 
 .input-group {
     
-    margin-bottom: 15px;
+   
    /*width: 480px; */
   /*@include box_sizing; */
 }
 
-
+.col-sm-8 {
+  margin-bottom: 15px;
+  }
 .wrapper-form{
     margin-top: 100px;
     box-shadow: 0 0 15px #888;
