@@ -135,7 +135,7 @@ admin.controller 'loginCtrl',["$scope", "$location","sessionStorage", ($scope, $
         $scope.user.password = "leelovaya"
         # ------------------------
         
-        
+        $scope.EMAIL_REGEXP =  /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/
         $scope.login = (user) ->
           #$scope.email = user.email
           #$scope.password = user.password
