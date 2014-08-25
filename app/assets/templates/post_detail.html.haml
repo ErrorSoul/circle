@@ -3,18 +3,21 @@
 
 .row
   .col-md-12
-    %form.form-input.col-md-10{"ng-submit" => "form.$valid && x()", :novalidate => true, :name => "form"}
-      %p.error-message{"ng-cloak" => true, "ng-show" => "showMessage()"} {{message}}
+    %form.form-input.col-md-10{"ng-submit" => "form.$valid && x()", :novalidate => true, :name => "form", 'enctype'=>'multipart/form-data', "method" => "POST"}
+      %p.message{"ng-cloak" => true, "ng-show" => "showMessage()"} {{message}}
       %div
-        {{x}}
+        {{post.asset}}
         
       %h1#title.editable{ 'ng-model'=>'post.title',"ng-bind-html"=>"post.title", "data-placeholder"=> 'DDDD' }
         {{post.title}}
        
       %hr
-       
+      %input#asset{  'ng-model' => 'post.asset','name' => 'post.asset','type' => 'file'}
       %p#text.editable{ "ng-bind-html"=>"post.text"}
         {{post.text}}
+
+      %p
+        {{post.asset}}
         
       
 

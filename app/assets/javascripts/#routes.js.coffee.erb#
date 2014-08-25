@@ -114,7 +114,7 @@ admin.factory 'Post', ['$resource', ($resource) ->
       params: {}
     'update':
       method: 'PATCH'
-      
+      transformRequest: formDataObject
       headers: {'Content-Type': 'multiform/data'}
       
     
@@ -212,10 +212,7 @@ admin.controller "PostDetailCtrl", ["$scope", "sessionStorage",'$routeParams', "
     $scope.post.title = document.getElementById('title').innerHTML
     $scope.post.text = document.getElementById('text').innerHTML
     $scope.post.asset = document.getElementById('asset').files[0]
-    r = new FileReader()
-    r.onloadend = (e) ->
-      $scope.post.asset = e.target.result
-    r.readAsBinaryString($scope.post.asset)
+    
     console.log($scope.post.asset, 'files')
     Post.update({id: $routeParams.id}, $scope.post, (data) ->
       console.log(data, "D")

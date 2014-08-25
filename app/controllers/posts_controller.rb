@@ -1,3 +1,4 @@
+require 'pry'
 class PostsController < ApplicationController
   respond_to :json
   before_action :set_post, only: [:edit, :update]
@@ -15,7 +16,12 @@ class PostsController < ApplicationController
   end
 
   def update
+    pry.binding
+    
     if @post.update_attributes(post_params)
+      #pry.binding
+      
+      
       render json: { message: "Your text saved" }
     else
       render json: {errors: @post.errors.full_messages}
@@ -31,6 +37,6 @@ class PostsController < ApplicationController
     
     def post_params
      
-      params.require(:post).permit(:title, :text)
+      params.require(:post).permit(:title, :text, :asset)
     end
 end
