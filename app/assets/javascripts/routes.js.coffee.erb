@@ -42,7 +42,25 @@ admin.config [
 ]
 
 
-
+`admin.service('fileUpload', ['$http', function ($http) {
+    this.uploadFileToUrl = function(post, uploadUrl){
+        var fd = new FormData();
+        fd.append('post[title]', post.text);
+        fd.append('post[text]', post.text);
+        fd.append('post[asset]', post.asset);
+        
+        $http.post(uploadUrl, fd, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        })
+        .success(function(data){
+          console.log(data);
+        })
+        .error(function(error){
+          console.log(error);
+        });
+    }
+}]);`
 
 
 ## mock class for test
@@ -114,8 +132,8 @@ admin.factory 'Post', ['$resource', ($resource) ->
       params: {}
     'update':
       method: 'PATCH'
-      
-      headers: {'Content-Type': 'multiform/data'}
+    
+    
       
     
   
@@ -212,10 +230,7 @@ admin.controller "PostDetailCtrl", ["$scope", "sessionStorage",'$routeParams', "
     $scope.post.title = document.getElementById('title').innerHTML
     $scope.post.text = document.getElementById('text').innerHTML
     $scope.post.asset = document.getElementById('asset').files[0]
-    r = new FileReader()
-    r.onloadend = (e) ->
-      $scope.post.asset = e.target.result
-    r.readAsBinaryString($scope.post.asset)
+    
     console.log($scope.post.asset, 'files')
     Post.update({id: $routeParams.id}, $scope.post, (data) ->
       console.log(data, "D")
@@ -235,3 +250,24 @@ admin.controller "PostDetailCtrl", ["$scope", "sessionStorage",'$routeParams', "
 
 
 
+admin.controller 'uploadCtrl', ["$scope", 'fileUpload', ($scope,fileUpload) ->
+  $scope.fileUpload = fileUpload
+  $scope.post = {}
+  $scope.post.asset = "file"
+  $scope.x = () ->
+   console.log($scope.post.title, 'title')
+   console.log($scope.post.text, 'text')
+   file = document.getElementById('asset').files[0]
+   console.log(file, 'file')
+   $scope.post.asset = file
+   uploadUrl = 'http://0.0.0.0:3000/tasks'
+   fileUpload.uploadFileToUrl($scope.post, uploadUrl)
+
+  
+  
+
+  
+  
+  
+  
+  ]

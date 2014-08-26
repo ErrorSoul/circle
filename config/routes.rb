@@ -7,6 +7,7 @@ Circle::Application.routes.draw do
   #get '/admin/*path' => 'admins#index'
   resources :sessions, only: [:create, :destroy]
   resources :posts
+  resources :tasks
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

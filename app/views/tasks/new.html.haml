@@ -1,0 +1,12 @@
+.row{'ng-controller' => 'uploadCtrl'}
+  .col-md-3
+    %form{'ng-submit' => 'x()'}
+
+      %input#form.form-control{ 'type'=> "text", 'placeholder' => "Text input", 'ng-model'=>'post.title', :novalidate => true, :name => 'form' }
+      %textarea#text.form-control{'rows' => '3', 'ng-model' => 'post.text'}
+      
+      %input#asset{  'ng-model' => 'post.asset','name' => 'post.asset','type' => 'file'} 
+        {{post.asset}}
+      %button.btn.btn-info.login{:type => "submit" }
+        LOGIN
+ 

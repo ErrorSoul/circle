@@ -16,10 +16,10 @@ class PostsController < ApplicationController
   end
 
   def update
-    pry.binding
+    #pry.binding
     
     if @post.update_attributes(post_params)
-      #pry.binding
+      
       
       
       render json: { message: "Your text saved" }
@@ -36,7 +36,7 @@ class PostsController < ApplicationController
 
     
     def post_params
-     
+      pry.binding
       params.require(:post).permit(:title, :text, :asset)
     end
 end

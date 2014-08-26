@@ -3,7 +3,7 @@
 
 .row
   .col-md-12
-    %form.form-input.col-md-10{"ng-submit" => "form.$valid && x()", :novalidate => true, :name => "form", 'enctype'=>'multipart/form-data', "method" => "POST"}
+    %form#form.form-input.col-md-10{"ng-submit" => "form.$valid && x()", :novalidate => true, :name => "form", 'enctype'=>'multipart/form-data', "method" => "PATCH"}
       %p.message{"ng-cloak" => true, "ng-show" => "showMessage()"} {{message}}
       %div
         {{post.asset}}
