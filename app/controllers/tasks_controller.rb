@@ -1,6 +1,6 @@
 require 'pry'
 class TasksController < ApplicationController
-
+  respond_to :json
   def new
     @post = Post.new
   end
@@ -10,7 +10,7 @@ class TasksController < ApplicationController
     
     @post = Post.new(post_params)
     if @post.save
-      render action: 'edit'
+      render json: {post: @post }  
     else 
      render action: 'new'
     end

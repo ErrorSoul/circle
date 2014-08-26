@@ -42,23 +42,22 @@ admin.config [
 ]
 
 
-`admin.service('fileUpload', ['$http', function ($http) {
+`admin.service('fileUpload', ['$http','$routeParams','Post', function ($http, $routeParams, Post) {
     this.uploadFileToUrl = function(post, uploadUrl){
         var fd = new FormData();
         fd.append('post[title]', post.text);
         fd.append('post[text]', post.text);
         fd.append('post[asset]', post.asset);
         
-        $http.post(uploadUrl, fd, {
-            transformRequest: angular.identity,
-            headers: {'Content-Type': undefined}
-        })
-        .success(function(data){
+        Post.create({id: $routeParams.id}, fd, function(data){
           console.log(data);
-        })
-        .error(function(error){
+          
+          console.log(data.post.asset.url, 'url');
+          post.asset.url =  data.post.asset.url;
+        },
+        function(error){
           console.log(error);
-        });
+        })
     }
 }]);`
 
@@ -125,13 +124,17 @@ admin.service 'sessionStorage', ["$http", class Sessions
  ]
 
 admin.factory 'Post', ['$resource', ($resource) ->
-  $resource('/posts/:id/:action', {id: '@id'},
+  $resource('/tasks/:id/:action', {id: '@id'},
     'query':
       method: 'GET'
       #isArray: true
       params: {}
     'update':
       method: 'PATCH'
+    'create':
+      method: 'POST'
+      transformRequest: angular.identity
+      headers: {'Content-Type': undefined}
     
     
       
@@ -251,6 +254,8 @@ admin.controller "PostDetailCtrl", ["$scope", "sessionStorage",'$routeParams', "
 
 
 admin.controller 'uploadCtrl', ["$scope", 'fileUpload', ($scope,fileUpload) ->
+  $scope.f = () ->
+    true
   $scope.fileUpload = fileUpload
   $scope.post = {}
   $scope.post.asset = "file"
@@ -262,6 +267,8 @@ admin.controller 'uploadCtrl', ["$scope", 'fileUpload', ($scope,fileUpload) ->
    $scope.post.asset = file
    uploadUrl = 'http://0.0.0.0:3000/tasks'
    fileUpload.uploadFileToUrl($scope.post, uploadUrl)
+   console.log($scope.post.asset.url, 'tttt')
+  
 
   
   
