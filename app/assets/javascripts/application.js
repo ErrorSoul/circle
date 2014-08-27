@@ -18,5 +18,6 @@
 //= require angular-route
 //= require routes
 //= require angular-resource 
-//= require angular-sanitize 
+//= require angular-sanitize
+//=require dropzone 
 

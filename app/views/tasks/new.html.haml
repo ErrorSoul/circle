@@ -1,11 +1,11 @@
 .row{'ng-controller' => 'uploadCtrl'}
   .col-md-3
-    %form{'ng-submit' => 'x()'}
+    %form#form.dropzone{'ng-submit' => 'x()', :action => '/tasks'}
 
-      %input#form.form-control{ 'type'=> "text", 'placeholder' => "Text input", 'ng-model'=>'post.title', :novalidate => true, :name => 'form' }
+      %input.form-control{ 'type'=> "text", 'placeholder' => "Text input", 'ng-model'=>'post.title', :novalidate => true, :name => 'form' }
       %textarea#text.form-control{'rows' => '3', 'ng-model' => 'post.text'}
       
-      %input#asset{  'ng-model' => 'post.asset','name' => 'post.asset','type' => 'file'} 
+      %input#asset{  'ng-model' => 'post.asset','name' => 'post.asset','type' => 'file', 'name' => 'file'} 
       %img(ng-src='{{post.asset.url}}')
       {{post.asset.url}}
       %button.btn.btn-info.login{:type => "submit" }
