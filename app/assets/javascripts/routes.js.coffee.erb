@@ -43,18 +43,13 @@ admin.config [
 
 
 `admin.service('fileUpload', ['$http','$routeParams','Post', function ($http, $routeParams, Post) {
-    this.uploadFileToUrl = function(post, uploadUrl){
+    this.uploadFileToUrl = function(post, callback){
         var fd = new FormData();
-        fd.append('post[title]', post.text);
+        fd.append('post[title]', post.title);
         fd.append('post[text]', post.text);
         fd.append('post[asset]', post.asset);
         
-        Post.create({id: $routeParams.id}, fd, function(data){
-          console.log(data);
-          
-          console.log(data.post.asset.url, 'url');
-          post.asset.url =  data.post.asset.url;
-        },
+        Post.update({id: $routeParams.id}, fd, callback,
         function(error){
           console.log(error);
         })
@@ -62,6 +57,23 @@ admin.config [
 }]);`
 
 
+
+`admin.directive('myCustomer', function() {
+    return {
+      restrict: 'E',
+      
+    
+      template: '<p ng-show="showMessage()"> Name: {{message}} </p>',
+      link: function (scope, element, attr) {
+        console.log(scope, 'scope');
+      
+        scope.showMessage = function() {
+          console.log(scope.message, 'scope.message')
+        return scope.message !== void 0 && scope.message.length > 0;
+        }
+      }
+    };
+  });`
 ## mock class for test
 admin.service("Mockach", [class X
 
@@ -120,17 +132,26 @@ admin.service 'sessionStorage', ["$http", class Sessions
     @setUser(user)
     @setAuth(status)
 
+  showMessage: (message) ->
+    console.log(message, "PPPPPPPPPP")
+    console.log(message , 'mess')
+    message isnt undefined and message.length  >0
+
 
  ]
 
 admin.factory 'Post', ['$resource', ($resource) ->
-  $resource('/tasks/:id/:action', {id: '@id'},
+  $resource('/posts/:id/:action', {id: '@id'},
     'query':
       method: 'GET'
       #isArray: true
       params: {}
+
     'update':
       method: 'PATCH'
+      transformRequest: angular.identity
+      headers: {'Content-Type': undefined}
+
     'create':
       method: 'POST'
       transformRequest: angular.identity
@@ -161,8 +182,7 @@ admin.controller 'loginCtrl',["$scope", "$location","sessionStorage", ($scope, $
         
         $scope.EMAIL_REGEXP =  /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/
         $scope.login = (user) ->
-          #$scope.email = user.email
-          #$scope.password = user.password
+          
           $scope.user = {}
           sessionStorage.login(user, (data) ->
             sessionStorage.updateUser(data.user, data.authorized))
@@ -213,38 +233,29 @@ admin.controller "DashboardCtrl", ["$scope", "sessionStorage", "Post", ($scope, 
 
 
 
-admin.controller "PostDetailCtrl", ["$scope", "sessionStorage",'$routeParams', "Post", ($scope, sessionStorage, $routeParams, Post) ->
+admin.controller "PostDetailCtrl", ["$scope", "sessionStorage",'$routeParams', "Post", "fileUpload", ($scope, sessionStorage, $routeParams, Post, fileUpload) ->
   Post.get({id: $routeParams.id, action: "edit" }, (data) ->
-    $scope.post = data.post
-    console.log($scope.post, "P"))
-  $scope.post = {}  
-  
+    $scope.post = data.post)
   $scope.input_check = true
+  $scope.t = {}
   angular.element('#title, #text').bind('input', ()->
+    $scope.message = ""
     $scope.input_check = false
     $scope.$apply())
-
-
-
-  #$scope.t = (title) ->
+  
+  #update post 
+  $scope.update =() ->
     
-      #title is document.getElementById('title').innerHTML
-  $scope.x=() ->
     $scope.post.title = document.getElementById('title').innerHTML
     $scope.post.text = document.getElementById('text').innerHTML
     $scope.post.asset = document.getElementById('asset').files[0]
+    fileUpload.uploadFileToUrl($scope.post, (data) ->
+      $scope.message = data.message or data.errors )
+    $scope.input_check = true
     
-    console.log($scope.post.asset, 'files')
-    Post.update({id: $routeParams.id}, $scope.post, (data) ->
-      console.log(data, "D")
-      $scope.message = data.message or data.errors
-      $scope.input_check = true
-      )
-   
-  
-  
-  $scope.showMessage = () ->
-          $scope.message isnt undefined and $scope.message.length >0
+
+
+
 
   ]
        
@@ -265,8 +276,8 @@ admin.controller 'uploadCtrl', ["$scope", 'fileUpload', ($scope,fileUpload) ->
    file = document.getElementById('asset').files[0]
    console.log(file, 'file')
    $scope.post.asset = file
-   uploadUrl = 'http://0.0.0.0:3000/tasks'
-   fileUpload.uploadFileToUrl($scope.post, uploadUrl)
+  
+   fileUpload.uploadFileToUrl($scope.post)
    console.log($scope.post.asset.url, 'tttt')
   
 

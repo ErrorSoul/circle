@@ -3,21 +3,25 @@
 
 .row
   .col-md-12
-    %form#form.form-input.col-md-10{"ng-submit" => "form.$valid && x()", :novalidate => true, :name => "form", 'enctype'=>'multipart/form-data', "method" => "PATCH"}
-      %p.message{"ng-cloak" => true, "ng-show" => "showMessage()"} {{message}}
-      %div
-        {{post.asset}}
+    %form#form.form-input.col-md-10{"ng-submit" => "form.$valid && update()", :novalidate => true, :name => "form", 'enctype'=>'multipart/form-data', "method" => "PATCH"}
+      %p.message{"ng-cloak" => true, "ng-show" => "showMessage('{{message}}')"} {{message}}
+      %my-customer(info='message')
+      
         
-      %h1#title.editable{ 'ng-model'=>'post.title',"ng-bind-html"=>"post.title", "data-placeholder"=> 'DDDD' }
+      %h1#title.editable{"ng-bind-html"=>"post.title", "data-placeholder"=> 'DDDD' }
         {{post.title}}
        
       %hr
       %input#asset{  'ng-model' => 'post.asset','name' => 'post.asset','type' => 'file'}
-      %p#text.editable{ "ng-bind-html"=>"post.text"}
-        {{post.text}}
+      
+      .image
+        %img.img-thumbnail(ng-src="{{post.asset.url}}")
+      .text  
+        %p#text.editable{ "ng-bind-html"=>"post.text|limitTo:8"}
+          {{post.text}}
+      
 
-      %p
-        {{post.asset}}
+      
         
       
 

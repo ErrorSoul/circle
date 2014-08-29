@@ -36,7 +36,6 @@ class PostsController < ApplicationController
 
     
     def post_params
-      pry.binding
       params.require(:post).permit(:title, :text, :asset)
     end
 end
