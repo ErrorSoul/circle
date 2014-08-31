@@ -4,28 +4,34 @@
 .row
   .col-md-12
     %form#form.form-input.col-md-10{"ng-submit" => "form.$valid && update()", :novalidate => true, :name => "form", 'enctype'=>'multipart/form-data', "method" => "PATCH"}
-      %p.message{"ng-cloak" => true, "ng-show" => "showMessage('{{message}}')"} {{message}}
-      %my-customer(info='message')
+      %my-customer
       
-        
+      %button(ng-click='showPopover()')  
       %h1#title.editable{"ng-bind-html"=>"post.title", "data-placeholder"=> 'DDDD' }
         {{post.title}}
        
       %hr
-      %input#asset{  'ng-model' => 'post.asset','name' => 'post.asset','type' => 'file'}
+      %label(for='asset' style="color: green; background-color: WhiteSmoke")
+        .col-md-3.glyphicon.glyphicon-cloud-download
+          Загрузить
+          
+          
+      %input#asset{  'ng-model' => 'post.asset','name' => 'post.asset','type' => 'file', 'style' => "visibility: hidden"}
       
       .image
         %img.img-thumbnail(ng-src="{{post.asset.url}}")
       .text  
-        %p#text.editable{ "ng-bind-html"=>"post.text|limitTo:8"}
+        %p#text.editable{ "ng-bind-html"=>"post.text"}
           {{post.text}}
       
 
       
         
-      
+   
 
       %button.btn.btn-info{:type => "submit", "ng-disabled"=>"input_check" }
-        Save Text
-%script
-  var editor = new MediumEditor('.editable');
+        %span.glyphicon.glyphicon-floppy-saved
+          Save 
+
+      .pop-window#pop-id(ng-hide="flag")
+        %input#asset{  'ng-model' => 'post.asset','name' => 'post.asset','type' => 'file'}

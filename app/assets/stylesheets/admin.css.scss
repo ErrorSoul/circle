@@ -9,8 +9,8 @@
 
 
 @import "variables"; 
-@import "bootstrap";
 @import "bootstrap-sprockets";
+@import "bootstrap";
 @import 'medium-editor';
 @import 'default';
 
@@ -165,3 +165,23 @@ input.ng-valid.ng-dirty {
 .media {
   height: 200px;
   }
+
+.pop-window{
+ position: absolute;
+ 
+ z-index: 2;
+ height: 150px;
+ width: 300px;
+ background-color: #eaeaea;
+  }
+
+
+h1 {
+  text-align: center;
+  padding: 0px;
+  }
+.image {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  }
+

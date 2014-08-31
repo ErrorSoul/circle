@@ -9,7 +9,8 @@
 //= require angular-sanitize
 //= require location_ctrl
 //= require medium-editor
-//= require init_medium
+
+
 
 
 
