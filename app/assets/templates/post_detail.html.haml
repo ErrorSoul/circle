@@ -7,22 +7,9 @@
       %my-customer
       
       %button(ng-click='showPopover()')  
-      %h1#title.editable{"ng-bind-html"=>"post.title", "data-placeholder"=> 'DDDD' }
-        {{post.title}}
+      %my-editor
        
-      %hr
-      %label(for='asset' style="color: green; background-color: WhiteSmoke")
-        .col-md-3.glyphicon.glyphicon-cloud-download
-          Загрузить
-          
-          
-      %input#asset{  'ng-model' => 'post.asset','name' => 'post.asset','type' => 'file', 'style' => "visibility: hidden" }
       
-      .image
-        %img.img-thumbnail(ng-src="{{post.asset.url}}")
-      .text  
-        %p#text.editable{ "ng-bind-html"=>"post.text"}
-          {{post.text}}
       
 
       

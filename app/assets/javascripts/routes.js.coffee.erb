@@ -52,6 +52,17 @@ admin.service('fileUpload',  ['$http','$routeParams','Post', ($http, $routeParam
     
 ])
 
+admin.directive('myEditor', () ->
+  restrict: 'E'
+  templateUrl: "<%= asset_path('title.html') %>"
+  link:  (scope, element, attr) ->
+        foo = () ->
+          scope.input_check = false
+          scope.message = ""
+          scope.$apply()
+        scope.edi = new MediumEditor('.editable') 
+        element.on('input', foo)
+     )
 
 admin.directive('myCustomer', () ->
      
@@ -220,13 +231,14 @@ admin.controller "PostDetailCtrl", ["$scope","$compile", "sessionStorage",'$rout
   angular.element('#asset').bind('change', () ->
     $scope.input_check = false
     $scope.$apply() )
+
   $scope.showPopover = () ->
     rect = document.getElementById('title').getBoundingClientRect()
     document.getElementById('pop-id').style.right = rect.right
     $scope.flag = !$scope.flag
    
-  $scope.y = () ->
-    $scope.input_check = false
+
+
     
   #update post 
   $scope.update =() ->
