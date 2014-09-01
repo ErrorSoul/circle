@@ -1,6 +1,6 @@
 describe "sessionStorage test", ->
   beforeEach module("admin")
-  beforeEach inject ($injector, $httpBackend ) ->
+  beforeEach inject ($injector, _$httpBackend_ ) ->
     
     @service = $injector.get("sessionStorage")
   
@@ -8,7 +8,7 @@ describe "sessionStorage test", ->
   
   
   
-    @httpB  = $httpBackend
+    @httpB  = _$httpBackend_
     @user =
             id: 10
             name: "John"

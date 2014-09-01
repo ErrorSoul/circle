@@ -3,6 +3,9 @@ describe "PostDetailCtrl", ->
   beforeEach(inject(($injector, _$httpBackend_, $rootScope, $controller, $routeParams) ->
     @$httpBackend = _$httpBackend_
     $routeParams.id = '1'
+    t = new FileReader
+    @fil
+    console.log(@file, "FILE")
     @scope = $rootScope.$new()
     @ctrl = $controller('PostDetailCtrl', $scope: @scope)
     @post = $injector.get("Post")
@@ -22,3 +25,5 @@ describe "PostDetailCtrl", ->
         @$httpBackend.expectGET('/posts/1/edit').respond({ post: @post_1})
         @$httpBackend.flush()
         expect(@scope.post).toEqual(@post_1)
+
+ 

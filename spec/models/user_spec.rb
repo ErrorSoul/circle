@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe User do
   before do
+    
     @user = User.new(name:"Arnold", email: "arni@mail.ru",
                      password: "foobar", password_confirmation: "foobar")
   end
@@ -13,6 +14,7 @@ describe User do
   it {should respond_to(:password)}
   it {should respond_to(:password_confirmation)}
   it {should respond_to(:remember_token)}
+  
   it { should be_valid }
   
   describe "when name is not present" do

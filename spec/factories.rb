@@ -27,9 +27,13 @@ FactoryGirl.define do
   
 
   factory :post do
+   
     title 
     text
   end
+
+  factory :post_with_asset, parent: :post do |x|
+    x.asset   { File.new("#{Rails.root}/spec/fixtures/dream.jpg") } end
 end
 
 

@@ -16,13 +16,17 @@ class PostsController < ApplicationController
   end
 
   def update
-    #pry.binding
+    
     
     if @post.update_attributes(post_params)
+      if @post.asset.filename
+        #pry.binding
+        render json: {message: "Your text saved", url: @post.asset.url}
       
-      
-      
-      render json: { message: "Your text saved" }
+      else
+        render json: { message: "Your text saved" }
+      end
+     
     else
       render json: {errors: @post.errors.full_messages}
     end
