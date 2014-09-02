@@ -185,3 +185,11 @@ h1 {
   margin-bottom: 15px;
   }
 
+.close-button {
+  font-size: 35px;
+  color: $pink-color;
+  
+  }
+.close-button:hover{
+  color: darken($pink-color, 30%)
+  }

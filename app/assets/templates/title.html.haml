@@ -1,11 +1,12 @@
  
 
 %h1#title.editable{"ng-bind-html"=>"post.title", "data-placeholder"=> 'DDDD' }
-        {{post.title}}
+  {{post.title}}
+
 %hr    
 %label(for='asset' style="color: green; background-color: WhiteSmoke")
-  .col-md-3.glyphicon.glyphicon-cloud-download
-  
+  .col-md-3.glyphicon.glyphicon-cloud-download 
+    Загрузить
 
 %input#asset{  'ng-model' => 'post.asset','name' => 'post.asset','type' => 'file', 'style' => "visibility: hidden" }
 

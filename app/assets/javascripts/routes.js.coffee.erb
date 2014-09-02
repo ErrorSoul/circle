@@ -52,7 +52,21 @@ admin.service('fileUpload',  ['$http','$routeParams','Post', ($http, $routeParam
     
 ])
 
-admin.directive('myEditor', () ->
+`admin.directive('ngReallyClick', [function() {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            element.bind('click', function() {
+                var message = attrs.ngReallyMessage;
+                if (message && confirm(message)) {
+                    scope.$apply(attrs.ngReallyClick);
+                }
+            });
+        }
+    }
+}]);`
+
+admin.directive('myEditor',['fileUpload', ( fileUpload) ->
   restrict: 'E'
   templateUrl: "<%= asset_path('title.html') %>"
   link:  (scope, element, attr) ->
@@ -60,9 +74,25 @@ admin.directive('myEditor', () ->
           scope.input_check = false
           scope.message = ""
           scope.$apply()
-        scope.edi = new MediumEditor('.editable') 
+
+        scope.update = () ->
+          scope.doc = (id) ->
+            document.getElementById(id)
+    
+          scope.post.title = scope.doc('title').innerHTML 
+          scope.post.text = scope.doc('text').innerHTML
+          scope.post.asset = scope.doc('asset').files[0]
+          fileUpload.uploadFileToUrl(scope.post, (data) ->
+            scope.message = data.message or data.errors
+            scope.post.asset.url = data.url if data.url
+            )
+          scope.input_check = true  
+
+       
+        scope.editor = new MediumEditor('.editable') 
         element.on('input', foo)
-     )
+        angular.element('#asset').bind('change', foo)
+     ])
 
 admin.directive('myCustomer', () ->
      
@@ -220,17 +250,11 @@ admin.controller "DashboardCtrl", ["$scope", "sessionStorage", "Post", ($scope, 
 admin.controller "PostDetailCtrl", ["$scope","$compile", "sessionStorage",'$routeParams', "Post", "fileUpload", ($scope, $compile,  sessionStorage, $routeParams, Post, fileUpload) ->
   Post.get({id: $routeParams.id, action: "edit" }, (data) ->
     $scope.post = data.post)
-  $scope.editor = new MediumEditor('.editable')
+
   $scope.input_check = true
   $scope.flag = true
-  $scope.t = {}
-  angular.element('.editable').bind('input', ()->
-    $scope.message = ""
-    $scope.input_check = false
-    $scope.$apply())
-  angular.element('#asset').bind('change', () ->
-    $scope.input_check = false
-    $scope.$apply() )
+  
+  
 
   $scope.showPopover = () ->
     rect = document.getElementById('title').getBoundingClientRect()
@@ -241,20 +265,8 @@ admin.controller "PostDetailCtrl", ["$scope","$compile", "sessionStorage",'$rout
 
     
   #update post 
-  $scope.update =() ->
-    $scope.doc = (id) ->
-      document.getElementById(id)
-    
-    $scope.post.title = $scope.doc('title').innerHTML 
-    $scope.post.text = $scope.doc('text').innerHTML
-    $scope.post.asset = $scope.doc('asset').files[0]
-    fileUpload.uploadFileToUrl($scope.post, (data) ->
-      $scope.message = data.message or data.errors
-      $scope.post.asset.url = data.url if data.url
-      )
-    $scope.input_check = true
-    
-
+  
+  
 
 
 
