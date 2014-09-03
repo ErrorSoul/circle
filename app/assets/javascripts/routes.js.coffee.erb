@@ -57,12 +57,14 @@ admin.service('fileUpload',  ['$http','$routeParams','Post', class FileUpload
     @fd.append('post[asset]', post.asset)
     return @fd
     
-  uploadFileToUrl: (post, callback) ->
+  uploadFileToUrl: (post, callback) =>
     
     
-    @Post.update({id: @$routeParams.id}, @createFormData(post), callback, (error) ->
+
+    @Post.update({id: @$routeParams.id}, @createFormData(post), callback, (error) =>
       console.log(error) )
-  createPost: (post, callback)  ->
+
+  createPost: (post, callback)  =>
     @Post.create({}, @createFormData(post), callback, (error) ->
       console.log(error) )
 ])
@@ -256,7 +258,7 @@ admin.controller 'loginCtrl',["$scope", "$location","sessionStorage", ($scope, $
   
 ]
 
-admin.controller "DashboardCtrl", ["$scope", "sessionStorage", "Post", ($scope, sessionStorage, Post) ->
+admin.controller "DashboardCtrl", ["$scope",  "sessionStorage", "Post", ($scope,  sessionStorage, Post) ->
   
   Post.query().$promise.then((data)->
     console.log("DATA !", data)
@@ -266,6 +268,8 @@ admin.controller "DashboardCtrl", ["$scope", "sessionStorage", "Post", ($scope, 
       
       
       )
+
+
   $scope.delete = (post) ->
     Post.delete({id: post.id}, (data) ->
       if data.message is "Your post deleted"
@@ -275,7 +279,8 @@ admin.controller "DashboardCtrl", ["$scope", "sessionStorage", "Post", ($scope, 
 
 
 
-admin.controller "PostDetailCtrl", ["$scope","$compile", "sessionStorage",'$routeParams', "Post", "fileUpload", ($scope, $compile,  sessionStorage, $routeParams, Post, fileUpload) ->
+admin.controller "PostDetailCtrl", ["$scope", "sessionStorage",'$routeParams', "Post", "fileUpload", ($scope, sessionStorage, $routeParams, Post, fileUpload) ->
+  $scope.notNew = true
   Post.get({id: $routeParams.id, action: "edit" }, (data) ->
     $scope.post = data.post
     console.log('data', data.post)
@@ -289,12 +294,7 @@ admin.controller "PostDetailCtrl", ["$scope","$compile", "sessionStorage",'$rout
   $scope.showPopover = () ->
     rect = document.getElementById('title').getBoundingClientRect()
     document.getElementById('pop-id').style.right = rect.right
-    $scope.flag = !$scope.flag
-   
-
-
-    
-  #update post 
+    $scope.flag = !$scope.flag 
   
   
 
@@ -303,29 +303,18 @@ admin.controller "PostDetailCtrl", ["$scope","$compile", "sessionStorage",'$rout
   ]
        
 
-admin.controller "PostNewCtrl", ["$scope", "sessionStorage",'$routeParams', "Post", "fileUpload", ($scope, sessionStorage, $routeParams, Post, fileUpload) ->
+admin.controller "PostNewCtrl", ["$scope", "sessionStorage", '$routeParams', "Post", "fileUpload", ($scope, sessionStorage,  $routeParams, Post, fileUpload) ->
   $scope.post = {}
   $scope.post.title = "Введи свой заголовок"
   $scope.post.text = "Введи свой текст"
 
-    
-
   $scope.uploadFileToUrl = fileUpload.createPost 
-  
-  
 
   $scope.showPopover = () ->
     rect = document.getElementById('title').getBoundingClientRect()
     document.getElementById('pop-id').style.right = rect.right
     $scope.flag = !$scope.flag
    
-
-
-    
-  #update post 
-  
-  
-
 
 
   ]

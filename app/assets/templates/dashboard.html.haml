@@ -14,7 +14,8 @@
         
         {{post.id}}
         %span.glyphicon.glyphicon-remove-sign.close-button.pull-right(ng-really-message="Вы уверены?" ng-really-click="delete(post)")
-        %img.col-md-4.col-xs-4(ng-src="{{post.asset.url}}" ng-if="post.asset.url")
+        %a(href='#/posts/{{post.id}}')
+          %img.col-md-4.col-xs-4(ng-src="{{post.asset.url}}" ng-if="post.asset.url" )
         .media-body
           
           %a.thumb{:href => '#/posts/{{post.id}}', "ng-bind-html"=> 'post.title'}

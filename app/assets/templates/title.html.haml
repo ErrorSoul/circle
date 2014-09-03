@@ -4,10 +4,16 @@
     %form#form.form-input.col-md-10{"ng-submit" => "form.$valid && update()", :novalidate => true, :name => "form", 'enctype'=>'multipart/form-data', "method" => "PATCH"}
       %my-customer
       
-      %button(ng-click='showPopover()')
-     
+      //%button(ng-click='showPopover()')
+      %a(href='#/posts/new' ng-if='notNew')
+        %span.glyphicon.glyphicon-pencil.pull-left
+      %a(href='#/dashboard')
+        %span.glyphicon.glyphicon-backward.pull-left
       %h1#title.editable(ng-bind-html="post.title" data-placeholder='Набирай заголовок' autofocus)
         {{post.title}}
+     
+      
+     
       
       
      
