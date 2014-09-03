@@ -1,24 +1,4 @@
 
 
 
-.row
-  .col-md-12
-    %form#form.form-input.col-md-10{"ng-submit" => "form.$valid && update()", :novalidate => true, :name => "form", 'enctype'=>'multipart/form-data', "method" => "PATCH"}
-      %my-customer
-      
-      %button(ng-click='showPopover()')  
-      %my-editor
-       
-      
-      
-
-      
-        
-   
-
-      %button.btn.btn-info{:type => "submit", "ng-disabled"=>"input_check" }
-        %span.glyphicon.glyphicon-floppy-saved
-          Save 
-
-      .pop-window#pop-id(ng-hide="flag")
-        %input#asset{  'ng-model' => 'post.asset','name' => 'post.asset','type' => 'file'}
+%my-editor
