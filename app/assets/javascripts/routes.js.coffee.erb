@@ -36,40 +36,56 @@ admin.config [
         templateUrl: "<%= asset_path('dashboard.html') %>"
         controller: 'DashboardCtrl'
 
+      .when '/posts/new',
+        templateUrl: "<%= asset_path('post_detail.html') %>"
+        controller: "PostNewCtrl"
+
       .when '/posts/:id',
         templateUrl: "<%= asset_path('post_detail.html') %>"
         controller: "PostDetailCtrl"
+
+      
 ]
 
-admin.service('fileUpload',  ['$http','$routeParams','Post', ($http, $routeParams, Post) ->
-  uploadFileToUrl: (post, callback) =>
-    fd = new FormData()
-    fd.append('post[title]', post.title)
-    fd.append('post[text]', post.text)
-    fd.append('post[asset]', post.asset)
-    Post.update({id: $routeParams.id}, fd, callback, (error) ->
-      console.log(error) )
+admin.service('fileUpload',  ['$http','$routeParams','Post', class FileUpload
+  constructor: (@$http, @$routeParams, @Post) ->
+    @fd = new FormData()
+  createFormData: (post) ->
     
+    @fd.append('post[title]', post.title)
+    @fd.append('post[text]', post.text)
+    @fd.append('post[asset]', post.asset)
+    return @fd
+    
+  uploadFileToUrl: (post, callback) ->
+    
+    
+    @Post.update({id: @$routeParams.id}, @createFormData(post), callback, (error) ->
+      console.log(error) )
+  createPost: (post, callback)  ->
+    @Post.create({}, @createFormData(post), callback, (error) ->
+      console.log(error) )
 ])
 
-`admin.directive('ngReallyClick', [function() {
-    return {
-        restrict: 'A',
-        link: function(scope, element, attrs) {
-            element.bind('click', function() {
-                var message = attrs.ngReallyMessage;
-                if (message && confirm(message)) {
-                    scope.$apply(attrs.ngReallyClick);
-                }
-            });
-        }
-    }
-}]);`
+
+
+admin.directive('ngReallyClick', [ () ->
+  restrict: 'A'
+  link: (scope, elem, attrs) ->
+    elem.bind('click', () ->
+      message = attrs.ngReallyMessage
+      if message and confirm(message)
+        scope.$apply(attrs.ngReallyClick))
+  
+  ])
 
 admin.directive('myEditor',['fileUpload', ( fileUpload) ->
   restrict: 'E'
   templateUrl: "<%= asset_path('title.html') %>"
   link:  (scope, element, attr) ->
+        scope.input_check = true
+        scope.flag = true
+        
         foo = () ->
           scope.input_check = false
           scope.message = ""
@@ -82,9 +98,13 @@ admin.directive('myEditor',['fileUpload', ( fileUpload) ->
           scope.post.title = scope.doc('title').innerHTML 
           scope.post.text = scope.doc('text').innerHTML
           scope.post.asset = scope.doc('asset').files[0]
-          fileUpload.uploadFileToUrl(scope.post, (data) ->
+          scope.uploadFileToUrl(scope.post, (data) ->
+            console.log(data, 'DaTA')
             scope.message = data.message or data.errors
-            scope.post.asset.url = data.url if data.url
+            if data.url
+              scope.post.asset.url = data.url
+              scope.asset_url = data.url
+              
             )
           scope.input_check = true  
 
@@ -180,6 +200,9 @@ admin.factory 'Post', ['$resource', ($resource) ->
       method: 'POST'
       transformRequest: angular.identity
       headers: {'Content-Type': undefined}
+
+    'delete':
+      method: 'DELETE'
     
     
       
@@ -242,17 +265,24 @@ admin.controller "DashboardCtrl", ["$scope", "sessionStorage", "Post", ($scope, 
       console.log(data)
       
       
-      )  
+      )
+  $scope.delete = (post) ->
+    Post.delete({id: post.id}, (data) ->
+      if data.message is "Your post deleted"
+        console.log(data, 'delete.data')
+        post.hideValue = true)
   ]
 
 
 
 admin.controller "PostDetailCtrl", ["$scope","$compile", "sessionStorage",'$routeParams', "Post", "fileUpload", ($scope, $compile,  sessionStorage, $routeParams, Post, fileUpload) ->
   Post.get({id: $routeParams.id, action: "edit" }, (data) ->
-    $scope.post = data.post)
+    $scope.post = data.post
+    console.log('data', data.post)
+    if data.post.asset
+      $scope.asset_url = data.post.asset.url )
 
-  $scope.input_check = true
-  $scope.flag = true
+  $scope.uploadFileToUrl = fileUpload.uploadFileToUrl
   
   
 
@@ -273,7 +303,33 @@ admin.controller "PostDetailCtrl", ["$scope","$compile", "sessionStorage",'$rout
   ]
        
 
+admin.controller "PostNewCtrl", ["$scope", "sessionStorage",'$routeParams', "Post", "fileUpload", ($scope, sessionStorage, $routeParams, Post, fileUpload) ->
+  $scope.post = {}
+  $scope.post.title = "Введи свой заголовок"
+  $scope.post.text = "Введи свой текст"
 
+    
+
+  $scope.uploadFileToUrl = fileUpload.createPost 
+  
+  
+
+  $scope.showPopover = () ->
+    rect = document.getElementById('title').getBoundingClientRect()
+    document.getElementById('pop-id').style.right = rect.right
+    $scope.flag = !$scope.flag
+   
+
+
+    
+  #update post 
+  
+  
+
+
+
+  ]
+       
 
 
 

@@ -13,6 +13,7 @@ describe "fileUpload", ->
     @post = $injector.get("Post")
     @service = $injector.get('fileUpload')
     @post_1 = ({title: "Title 1", text: "Text 1"})
+    @new_post = ({title: "New title", text: "new text"})
     ))
 
   afterEach ->
@@ -32,8 +33,23 @@ describe "fileUpload", ->
       
       @$httpBackend.expectPATCH("/posts/1" ).respond({message: "ok"})
 
-    it "login and authentication", ->
+    it "update post", ->
    
       @service.uploadFileToUrl(@post_1, @callback)
       @$httpBackend.flush()
       expect(@obj.message).toEqual('ok')
+
+
+  describe "createPost", ->
+    beforeEach ->
+      @callback = (data) =>
+        @obj.message = data.message
+      @$httpBackend.expectPOST("/posts", @service.createFormData(@new_post)).respond({message: "ok"})
+
+    it 'create post', ->
+      @service.createPost(@new_post, @callback)
+      @$httpBackend.flush()
+      expect(@obj.message).toEqual('ok')
+      
+        
+        
