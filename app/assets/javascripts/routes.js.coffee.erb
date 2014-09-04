@@ -169,11 +169,16 @@ admin.service("Mockach", [class X
 admin.service 'sessionStorage', ["$http",'$cookieStore', class Sessions
 
   constructor: (@$http, @$cookieStore) ->
-    @_user = {}
+    @_user = null
     @_authorized = false
 
   authorized: ->
-    @_authorized is "true"
+    console.log(@$cookieStore.get('token') isnt null, 'GET {}')
+    console.log(@$cookieStore.get('token'), 'GET')
+    console.log((@_authorized is "true" or !! @$cookieStore.get('token')), 'authorized')
+    @_authorized is "true" or (!!@$cookieStore.get('token'))
+      
+    
 
   setAuth: (status) ->
     @_authorized = status
@@ -183,10 +188,16 @@ admin.service 'sessionStorage', ["$http",'$cookieStore', class Sessions
     @_user
 
   setUser: (user) ->
-
-    @_user.id = user.id 
-    @_user.name = user.name
+    if user
+      @_user = {}
+      @_user.id = user.id
+      @_user.name = user.name
+    else 
+      @_user = user
     @$cookieStore.put('token', @_user)
+    console.log(@_user, 'user!@')
+    console.log(@$cookieStore.get('token'), "TOKEN")
+    console.log(!!@$cookieStore.get('token'), "!!TOKEN")
 
   login: (newUser, callback)->
     @$http.post('/sessions', user: newUser).success(callback)
@@ -201,7 +212,7 @@ admin.service 'sessionStorage', ["$http",'$cookieStore', class Sessions
       console.log(newUser, 'newuser')
       user = newUser
     else
-      user = {}
+      user = null
     @setUser(user)
     @setAuth(status)
 

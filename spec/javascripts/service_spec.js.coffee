@@ -23,7 +23,8 @@ describe "sessionStorage test", ->
     @set_user =
                id: @user.id
                name: @user.name
-    @bad_user = {}
+    ##{}
+    @bad_user = null
 
 
   afterEach ->
@@ -110,12 +111,12 @@ describe "sessionStorage test", ->
 
     it "no authorized", ->
       @service.updateUser(@user, "false")
-      expect(@service.getUser()).toEqual({})
+      expect(@service.getUser()).toEqual(@bad_user)
       expect(@service.authorized()).toBe(false)
 
     it "authorized with null user", ->
       @service.updateUser(null, "false")
-      expect(@service.getUser()).toEqual({})
+      expect(@service.getUser()).toEqual(@bad_user)
       expect(@service.authorized()).toBe(false)
 
   describe "sessionStorage getter/setter ", ->
@@ -125,7 +126,7 @@ describe "sessionStorage test", ->
       
         null_user = @service.getUser()
         console.log(null_user, "NULL_USER")
-        expect(null_user).toEqual({})
+        expect(null_user).toEqual(null)
 
       describe "have user", ->
         beforeEach ->

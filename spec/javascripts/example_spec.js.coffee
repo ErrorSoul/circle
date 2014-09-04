@@ -6,14 +6,17 @@ describe "Login Controller", ->
     beforeEach module('admin')
     #ctrl  = {}
     #scope = {}
-    beforeEach(inject(($injector, _$httpBackend_, _$location_, $rootScope, $controller) ->
+    beforeEach(inject(($injector, _$httpBackend_, _$cookieStore_, _$location_, $rootScope, $controller) ->
       @$httpBackend = _$httpBackend_
       @location = _$location_
       @r = $rootScope
+      @cookie = _$cookieStore_
       @scope = $rootScope.$new()
       @service = $injector.get("sessionStorage")
       @ctrl = $controller('loginCtrl', $scope: @scope)
-     
+      `$rootScope.$on('$routeChangeStart', function(event, current, last) {
+        console.log('change');
+          })`
       
       @user =
                email: "bruce2000@mail.ru"
@@ -41,17 +44,19 @@ describe "Login Controller", ->
         
         #spyOn(@location, "path").andReturn("/login")
           
-        
+        @cookie.put('token', false)
+        console.log(@cookie.get('token'), "token")
+        console.log(!!@cookie.get('token'), "token!!")
         @$httpBackend.expectPOST('/sessions', user: @bad_email).respond({authorized: 'false'})
         #because mock location can't read path properly
         # location.path equal '' ;('/' in html5mode)
         @location.path('/login')
         
         @scope.login(@bad_email)
-        #@r.$digest()
+        @r.$digest()
         @$httpBackend.flush()
         expect(@service.authorized()).toBe(false)
-        expect(@service.getUser()).toEqual({})
+        expect(@service.getUser()).toBeNull()
         #expect(@location.path).toHaveBeenCalled()
         expect(@location.path()).toEqual('/login')
         expect(@scope.message).toEqual("Invalid login or password")
