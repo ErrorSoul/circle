@@ -6,10 +6,11 @@ describe "Login Controller", ->
     beforeEach module('admin')
     #ctrl  = {}
     #scope = {}
-    beforeEach(inject(($injector, _$httpBackend_, _$location_, $rootScope, $controller) ->
+    beforeEach(inject(($injector, _$httpBackend_, _$cookieStore_, _$location_, $rootScope, $controller) ->
       @$httpBackend = _$httpBackend_
       @location = _$location_
       @r = $rootScope
+      @cookie = _$cookieStore_
       @scope = $rootScope.$new()
       @service = $injector.get("sessionStorage")
       @ctrl = $controller('loginCtrl', $scope: @scope)

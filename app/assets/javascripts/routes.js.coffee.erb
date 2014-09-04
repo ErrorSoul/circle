@@ -1,6 +1,9 @@
 
-admin = angular.module( 'admin',['ngRoute', 'ngResource', 'ngSanitize'])
+admin = angular.module( 'admin',['ngRoute','ngCookies', 'ngResource', 'ngSanitize'])
 
+
+
+      
 
 
 admin.config [
@@ -17,7 +20,8 @@ admin.config [
     #$locationProvider.hashPrefix('!')
     
    
-  
+
+    
   
   
     
@@ -46,6 +50,21 @@ admin.config [
 
       
 ]
+`admin.run(function ($rootScope, $location, sessionStorage) {
+
+  $rootScope.$on('$routeChangeStart', function (event, nextState) {
+   console.log('change state');
+   console.log(nextState, 'fffffnextfff')
+   if (sessionStorage.authorized()){
+    event.preventDefault();
+    
+  }else {
+  $location.path('/login');
+  }
+     
+    })
+  });`
+
 
 admin.service('fileUpload',  ['$http','$routeParams','Post', class FileUpload
   constructor: (@$http, @$routeParams, @Post) ->
@@ -147,9 +166,9 @@ admin.service("Mockach", [class X
     b: () -> return 4
   ]) 
 ###
-admin.service 'sessionStorage', ["$http", class Sessions
+admin.service 'sessionStorage', ["$http",'$cookieStore', class Sessions
 
-  constructor: (@$http) ->
+  constructor: (@$http, @$cookieStore) ->
     @_user = {}
     @_authorized = false
 
@@ -164,8 +183,10 @@ admin.service 'sessionStorage', ["$http", class Sessions
     @_user
 
   setUser: (user) ->
+
     @_user.id = user.id 
-    @_user.name = user.name 
+    @_user.name = user.name
+    @$cookieStore.put('token', @_user)
 
   login: (newUser, callback)->
     @$http.post('/sessions', user: newUser).success(callback)
@@ -177,6 +198,7 @@ admin.service 'sessionStorage', ["$http", class Sessions
 
   updateUser: (newUser, status) =>
     if status is "true"
+      console.log(newUser, 'newuser')
       user = newUser
     else
       user = {}
@@ -203,7 +225,7 @@ admin.factory 'Post', ['$resource', ($resource) ->
       transformRequest: angular.identity
       headers: {'Content-Type': undefined}
 
-    'delete':
+    'remove':
       method: 'DELETE'
     
     
@@ -258,21 +280,21 @@ admin.controller 'loginCtrl',["$scope", "$location","sessionStorage", ($scope, $
   
 ]
 
-admin.controller "DashboardCtrl", ["$scope",  "sessionStorage", "Post", ($scope,  sessionStorage, Post) ->
-  
+admin.controller "DashboardCtrl", ["$scope", '$location', "sessionStorage", "Post", ($scope, $location, sessionStorage, Post) ->
   Post.query().$promise.then((data)->
     console.log("DATA !", data)
     $scope.posts = data.posts
     ).then((data) ->
-      console.log(data)
-      
-      
-      )
+    console.log(data)
+          
+          
+    )
 
 
   $scope.delete = (post) ->
-    Post.delete({id: post.id}, (data) ->
+    Post.remove({id: post.id}, (data) ->
       if data.message is "Your post deleted"
+        $scope.message = data.message
         console.log(data, 'delete.data')
         post.hideValue = true)
   ]

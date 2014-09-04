@@ -1,6 +1,6 @@
 describe "sessionStorage test", ->
   beforeEach module("admin")
-  beforeEach inject ($injector, _$httpBackend_ ) ->
+  beforeEach inject ($injector, _$httpBackend_ , $rootScope) ->
     
     @service = $injector.get("sessionStorage")
   
@@ -9,6 +9,10 @@ describe "sessionStorage test", ->
   
   
     @httpB  = _$httpBackend_
+
+  
+  
+    @r = $rootScope       
     @user =
             id: 10
             name: "John"
@@ -52,6 +56,8 @@ describe "sessionStorage test", ->
         user: @user,
         authorized: "true")
       @service.login(@user, @callback)
+      
+    
       @httpB.flush()
       expect(@service.authorized()).toBe(true)
       expect(@service.getUser()).toEqual(@set_user)
@@ -61,6 +67,7 @@ describe "sessionStorage test", ->
         
         authorized: "false")
       @service.login(@bad_user, @callback)
+      
       @httpB.flush()
       expect(@service.authorized()).toBe(false)
       expect(@service.getUser()).toEqual(@bad_user)
