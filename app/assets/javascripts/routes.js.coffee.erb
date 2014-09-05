@@ -100,7 +100,47 @@ admin.directive('ngReallyClick', [ () ->
   
   ])
 
-admin.directive('myEditor',['fileUpload', ( fileUpload) ->
+
+admin.directive('popWindow',['$http',"$timeout", ($http, $timeout) ->
+  restrict: 'E'
+  templateUrl: "<%= asset_path('popWindow.html') %>"
+  link:  (scope, element, attr) ->
+    scope.showPopover = () ->
+      rect = window.getSelection()
+      range = rect.getRangeAt(0)
+      boundary = range.getBoundingClientRect()
+      console.log(boundary.top.toString() + 'px')
+      popover = document.getElementById('pop-id')
+      popover.style.top = boundary.top.toString() + 'px'
+      popover.style.left = boundary.left.toString() + 'px'
+      scope.flag = !scope.flag
+
+    scope.x = () ->
+      fd = new FormData()
+      scope.photo = {}
+      scope.photo.asset = scope.doc('photo').files[0]
+      fd.append('photo[asset]', scope.photo.asset)
+      ozc =
+        transformRequest: angular.identity
+        headers: {'Content-Type': undefined}
+          
+      callbacka = (data) ->
+        scope.photo.asset.url = data.url
+        console.log(data)
+      $http.post('/photos', fd, ozc).success(callbacka)
+        .error(callbacka).then((x) ->
+          
+          scope.flag = true
+          t = window.getSelection()
+          d = #{}
+          myHTML = "</p><img class='img-thumbnail' ng-src=#{scope.photo.asset.url} src=#{scope.photo.asset.url}><p>"
+          #document.execCommand("CreateLink", false , t)
+          document.execCommand('insertHTML', false, myHTML))
+          
+            
+    
+    ])
+admin.directive('myEditor',['fileUpload',"$timeout", ( fileUpload, $timeout) ->
   restrict: 'E'
   templateUrl: "<%= asset_path('title.html') %>"
   link:  (scope, element, attr) ->
@@ -108,15 +148,19 @@ admin.directive('myEditor',['fileUpload', ( fileUpload) ->
         scope.flag = {}
         scope.flag.x = true
         
-        foo = () ->
+        f = () ->
           scope.input_check = false
           scope.message = ""
-          scope.$apply()
         
           
+          
+        foo = () ->
+          $timeout(f, 0)
+        
+        scope.doc = (id) ->
+            document.getElementById(id)  
         scope.update = () ->
-          scope.doc = (id) ->
-            document.getElementById(id)
+          
     
           scope.post.title = scope.doc('title').innerHTML 
           scope.post.text = scope.doc('text').innerHTML
@@ -130,6 +174,10 @@ admin.directive('myEditor',['fileUpload', ( fileUpload) ->
               
             )
           scope.input_check = true
+
+
+        
+          
         
           
             
@@ -137,22 +185,17 @@ admin.directive('myEditor',['fileUpload', ( fileUpload) ->
         `function Extension() {
           this.parent = true;
 
-          this.button = document.createElement('button');
+          this.button = document.getElementById('formedium');
           this.button.className = 'medium-editor-action';
-          this.button.innerText = 'X';
-          this.button.onclick = this.onClick.bind(this);
+          this.button.innerText = 'IMG';
+          //this.button.onclick = this.onClick.bind(this);
           }
 
           Extension.prototype.getButton = function() {
           return this.button;
           };
 
-          Extension.prototype.onClick = function() {
-          alert('This is editor: #' + this.base.id);
-          scope.showPopover()          
-          
-          
-          };`
+          //Extension.prototype.onClick = scope.showPopover;`
 
 
             
@@ -164,11 +207,11 @@ admin.directive('myEditor',['fileUpload', ( fileUpload) ->
           
           
         scope.editor = new MediumEditor('.editable',
-          buttons: ['bold','extension'],
+          buttons: ['bold', 'italic', 'underline', 'anchor', 'header1', 'header2', 'quote','extension'],
           extensions:
           
             extension: new Extension()) 
-        element.on('input', foo)
+        angular.element('.editable').on('input', foo)
         angular.element('#asset').bind('change', foo)
      ])
 
@@ -178,8 +221,6 @@ admin.directive('myCustomer', () ->
       template: '<p ng-show="showMessage()"> {{message}} </p>'
       link:  (scope, element, attr) ->
         scope.showMessage = () ->
-          console.log(scope.message, 'scope.message')
-          console.log(scope.flag, 'SCOPE>FLAG')
           scope.message isnt undefined and scope.message.length >0 )
 
 ## mock class for test
@@ -350,7 +391,7 @@ admin.controller "DashboardCtrl", ["$scope", '$location', "sessionStorage", "Pos
 
 
 
-admin.controller "PostDetailCtrl", ["$scope", "sessionStorage",'$routeParams', "Post", "fileUpload", ($scope, sessionStorage, $routeParams, Post, fileUpload) ->
+admin.controller "PostDetailCtrl", ["$scope", "$timeout","sessionStorage",'$routeParams', "Post", "fileUpload", ($scope, $timeout,sessionStorage, $routeParams, Post, fileUpload) ->
   $scope.notNew = true
   Post.get({id: $routeParams.id, action: "edit" }, (data) ->
     $scope.post = data.post
@@ -359,11 +400,15 @@ admin.controller "PostDetailCtrl", ["$scope", "sessionStorage",'$routeParams', "
       $scope.asset_url = data.post.asset.url )
 
   $scope.uploadFileToUrl = fileUpload.uploadFileToUrl
-
-  $scope.showPopover = () ->
-    rect = document.getElementById('title').getBoundingClientRect()
-    document.getElementById('pop-id').style.right = rect.right
-    $scope.flag = !$scope.flag
+  
+   
+  
+          
+          
+          
+          
+        
+  
   
   
 

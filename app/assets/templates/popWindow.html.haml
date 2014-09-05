@@ -1,0 +1,8 @@
+
+.pop-window#pop-id(ng-hide="flag")
+  %form.col-md-10{"ng-submit" => "pop_form.$valid", :novalidate => true, :name => "pop_form", 'enctype'=>'multipart/form-data', "method" => "PATCH"}
+    %label(for='photo' style="color: green; background-color: WhiteSmoke")
+      .col-md-3.glyphicon.glyphicon-cloud-download 
+        Загрузить
+    %input#photo{  'ng-model' => 'photo.asset','name' => 'photo.asset','type' => 'file'}
+      %button( type='button' ng-click='x()')

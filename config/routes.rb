@@ -6,6 +6,7 @@ Circle::Application.routes.draw do
   #get '/admin/login' => 'admins#index'
   #get '/admin/*path' => 'admins#index'
   resources :sessions, only: [:create, :destroy]
+  resources :photos, only: [:create]
   resources :posts
   resources :tasks
   

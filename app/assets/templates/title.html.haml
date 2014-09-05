@@ -4,7 +4,7 @@
     %form#form.form-input.col-md-10{"ng-submit" => "form.$valid && update()", :novalidate => true, :name => "form", 'enctype'=>'multipart/form-data', "method" => "PATCH"}
       %my-customer
       
-      %button(ng-click='showPopover()')
+      //%button(ng-click='showPopover()' type='button')
       %a(href='#/posts/new' ng-if='notNew')
         %span.glyphicon.glyphicon-pencil.pull-left
       %a(href='#/dashboard')
@@ -44,7 +44,9 @@
         %span.glyphicon.glyphicon-floppy-saved
           Save 
 
-      .pop-window#pop-id(ng-hide="flag")
-        %input#asset{  'ng-model' => 'post.asset','name' => 'post.asset','type' => 'file'}
-        %button(ng-click)
+      
 
+      %button#formedium(ng-click='showPopover()')
+     
+
+      %pop-window
