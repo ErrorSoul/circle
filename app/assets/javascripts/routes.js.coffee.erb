@@ -105,13 +105,15 @@ admin.directive('myEditor',['fileUpload', ( fileUpload) ->
   templateUrl: "<%= asset_path('title.html') %>"
   link:  (scope, element, attr) ->
         scope.input_check = true
-        scope.flag = true
+        scope.flag = {}
+        scope.flag.x = true
         
         foo = () ->
           scope.input_check = false
           scope.message = ""
           scope.$apply()
-
+        
+          
         scope.update = () ->
           scope.doc = (id) ->
             document.getElementById(id)
@@ -127,10 +129,45 @@ admin.directive('myEditor',['fileUpload', ( fileUpload) ->
               scope.asset_url = data.url
               
             )
-          scope.input_check = true  
+          scope.input_check = true
+        
+          
+            
 
-       
-        scope.editor = new MediumEditor('.editable') 
+        `function Extension() {
+          this.parent = true;
+
+          this.button = document.createElement('button');
+          this.button.className = 'medium-editor-action';
+          this.button.innerText = 'X';
+          this.button.onclick = this.onClick.bind(this);
+          }
+
+          Extension.prototype.getButton = function() {
+          return this.button;
+          };
+
+          Extension.prototype.onClick = function() {
+          alert('This is editor: #' + this.base.id);
+          scope.showPopover()          
+          
+          
+          };`
+
+
+            
+          
+
+        
+        
+        
+          
+          
+        scope.editor = new MediumEditor('.editable',
+          buttons: ['bold','extension'],
+          extensions:
+          
+            extension: new Extension()) 
         element.on('input', foo)
         angular.element('#asset').bind('change', foo)
      ])
@@ -142,6 +179,7 @@ admin.directive('myCustomer', () ->
       link:  (scope, element, attr) ->
         scope.showMessage = () ->
           console.log(scope.message, 'scope.message')
+          console.log(scope.flag, 'SCOPE>FLAG')
           scope.message isnt undefined and scope.message.length >0 )
 
 ## mock class for test
@@ -321,13 +359,15 @@ admin.controller "PostDetailCtrl", ["$scope", "sessionStorage",'$routeParams', "
       $scope.asset_url = data.post.asset.url )
 
   $scope.uploadFileToUrl = fileUpload.uploadFileToUrl
-  
-  
 
   $scope.showPopover = () ->
     rect = document.getElementById('title').getBoundingClientRect()
     document.getElementById('pop-id').style.right = rect.right
-    $scope.flag = !$scope.flag 
+    $scope.flag = !$scope.flag
+  
+  
+
+  
   
   
 
