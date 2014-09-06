@@ -1,5 +1,5 @@
 
-admin = angular.module( 'admin',['ngRoute','ngCookies', 'ngResource', 'ngSanitize'])
+admin = angular.module( 'admin',['ngRoute','ngCookies', 'ngResource', 'ngSanitize', 'ngAnimate'])
 
 
 
@@ -108,6 +108,7 @@ admin.directive('popWindow',['$http',"$timeout", ($http, $timeout) ->
     scope.showPopover = () ->
       rect = window.getSelection()
       range = rect.getRangeAt(0)
+      scope.range = range
       boundary = range.getBoundingClientRect()
       console.log(boundary.top.toString() + 'px')
       popover = document.getElementById('pop-id')
@@ -132,9 +133,35 @@ admin.directive('popWindow',['$http',"$timeout", ($http, $timeout) ->
           
           scope.flag = true
           t = window.getSelection()
-          d = #{}
-          myHTML = "</p><img class='img-thumbnail' ng-src=#{scope.photo.asset.url} src=#{scope.photo.asset.url}><p>"
+          t.addRange(scope.range)
+        
+          myHTML = "</p><p></p><img class='img-thumbnail' ng-src=#{scope.photo.asset.url} src=#{scope.photo.asset.url}><p></p><p>"
           #document.execCommand("CreateLink", false , t)
+          
+          document.execCommand("InsertParagraph", false, t)
+          a = document.getElementById('text')
+          #t = window.getSelection()
+          
+          c = a.getElementsByTagName("div").item(0)
+          
+          console.log(c, "CcCCCcc")
+          scope.range.setStart(c, 0)
+          t.addRange(scope.range)
+          console.log(t.getRangeAt(0), "T")
+         
+          #t.addRange(scope.range)
+          document.execCommand("InsertParagraph", false, t)
+          c = a.getElementsByTagName("div").item(0)
+          console.log(c, 'C1')
+          scope.range.setStart(c, 0)
+          t.addRange(scope.range)
+          console.log(t.getRangeAt(0), "T")
+          #t.addRange(scope.range)
+          
+          
+          
+          
+         
           document.execCommand('insertHTML', false, myHTML))
           
             
@@ -381,12 +408,15 @@ admin.controller "DashboardCtrl", ["$scope", '$location', "sessionStorage", "Pos
     )
 
 
-  $scope.delete = (post) ->
-    Post.remove({id: post.id}, (data) ->
+  $scope.delete = (idx) ->
+    post_to_delete = $scope.posts[idx]
+    Post.remove({id: post_to_delete.id}, (data) ->
       if data.message is "Your post deleted"
         $scope.message = data.message
         console.log(data, 'delete.data')
-        post.hideValue = true)
+        #post_to_delete.hideValue = true)
+        $scope.posts.splice(idx, 1))
+        
   ]
 
 

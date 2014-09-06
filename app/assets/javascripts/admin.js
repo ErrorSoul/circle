@@ -10,6 +10,8 @@
 //= require location_ctrl
 //= require medium-editor
 //= require angular-cookies
+//= require angular-animate
+
 
 
 
