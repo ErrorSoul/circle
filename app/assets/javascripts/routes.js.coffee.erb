@@ -106,14 +106,24 @@ admin.directive('popWindow',['$http',"$timeout", ($http, $timeout) ->
   templateUrl: "<%= asset_path('popWindow.html') %>"
   link:  (scope, element, attr) ->
     scope.showPopover = () ->
+      myWidth = window.innerWidth
+      myHeight = window.innerHeight
+      myScroll = window.pageYOffset
+      myScrollWidth = 0
+      myScrollHeight = 0
       rect = window.getSelection()
       range = rect.getRangeAt(0)
       scope.range = range
       boundary = range.getBoundingClientRect()
       console.log(boundary.top.toString() + 'px')
       popover = document.getElementById('pop-id')
-      popover.style.top = boundary.top.toString() + 'px'
-      popover.style.left = boundary.left.toString() + 'px'
+      if myHeight and window.scrollMaxY
+        myScrollWidth = document.body.scrollWidth
+    		myScrollHeight = window.innerHeight + window.scrollMaxY
+     
+      
+      popover.style.left = ((myWidth / 2)-(popover.offsetWidth / 2))+"px"
+      popover.style.top = ((myHeight / 2)-(popover.offsetHeight / 2)+myScroll)+"px"
       scope.flag = !scope.flag
 
     scope.x = () ->
@@ -284,7 +294,7 @@ admin.service 'sessionStorage', ["$http",'$cookieStore', class Sessions
     console.log((@_authorized is "true" or !! @$cookieStore.get('token')), 'authorized')
     @_authorized is "true" or (!!@$cookieStore.get('token'))
       
-    
+ 
 
   setAuth: (status) ->
     @_authorized = status
