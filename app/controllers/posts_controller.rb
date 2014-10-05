@@ -1,4 +1,4 @@
-require 'pry'
+
 class PostsController < ApplicationController
   respond_to :json
   before_action :set_post, only: [:edit, :update, :destroy]

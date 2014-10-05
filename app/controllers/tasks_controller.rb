@@ -1,4 +1,4 @@
-require 'pry'
+
 class TasksController < ApplicationController
   respond_to :json
   def new

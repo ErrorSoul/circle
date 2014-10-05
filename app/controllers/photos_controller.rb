@@ -1,4 +1,4 @@
-require 'pry'
+
 class PhotosController < ApplicationController
   respond_to :json
   def create
