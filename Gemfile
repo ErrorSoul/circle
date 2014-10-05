@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.3'
+gem 'rails'
 ruby '2.0.0'
 
 gem 'bcrypt-ruby', '3.1.2'
@@ -9,7 +9,6 @@ gem 'bcrypt-ruby', '3.1.2'
 # Use postgresql as the database for Active Record
 gem 'pg'
 
-gem 'sprockets_better_errors'
 gem 'haml-rails'
 
 gem 'carrierwave', '0.8.0'
