@@ -9,7 +9,8 @@ gem 'bcrypt-ruby', '3.1.2'
 # Use postgresql as the database for Active Record
 gem 'pg'
 
-gem 'haml-rails'
+gem 'haml', '~> 4.0.5'
+gem "haml-rails", "~> 0.4.0"
 
 gem 'carrierwave', '0.8.0'
 # Use SCSS for stylesheets
